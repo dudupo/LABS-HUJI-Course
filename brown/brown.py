@@ -72,12 +72,41 @@ class particale():
 
     def calculate_total_distance(self):
         _last = self.last()
-        return np.sqrt(self.distance())
+        # return np.sqrt(self.distance())
+
+    def calculate_total_grad(self):
+        i = 0 
+        temp = self
+        while i < 5 and temp.next != None:
+            temp = temp.next
+            i += 1
+        return temp .CM[0] -  self.CM[0], temp.CM[1] -  self.CM[1]
+    
+    def reduce_mean(self , _mean):
+        temp = self
+        while temp != None:
+            temp.CM[0] -= _mean[0]
+            temp.CM[1] -= _mean[1]
+            temp = temp.next
+
+def reduce_mean_mean(particales):
+    X_mean, Y_mean = [], [] 
+    for _particale in particales:
+        x, y = _particale.calculate_total_grad()
+        X_mean.append(x)
+        Y_mean.append(y)
+    np.array(X_mean)
+    np.array(Y_mean)
+    x_mean, y_mean  = np.mean(X_mean), np.mean(Y_mean)
+    print(x_mean, y_mean)
+    for _particale in particales:
+        _particale.reduce_mean((x_mean, y_mean))
+        
 
 def reasonable_kernel(_particale):
     temp = _particale
     while temp.next != None: 
-        if temp.distance( temp.next  ) > 10:
+        if temp.distance( temp.next  ) > 10: 
             if temp.prev is None:
                 return None
             else:
@@ -212,22 +241,27 @@ def test_read():
             dump(particales_frames,open("pickleout{0}.pkl".format(w) , "wb+"))
         else:
             particales_frames = load(open("pickleout{0}.pkl".format(w) , "rb"))
-            print(particales_frames[0][-1].CM)
+            # print(particales_frames[0][-1].CM)
             
             reasonable = list(map(reasonable_kernel, particales_frames[0]))
             reasonable = list(filter( lambda x : x != None, reasonable))
-            # print(reasonable)
+            reasonable = list(filter( lambda p: len(p.x) < 10, reasonable))
+            print("reasonable size = ", len(reasonable) )
+
+            reduce_mean_mean( reasonable )  
+
+
             _temp_ = list(map(calculate_time_distance, reasonable))
             # print(_temp_)
             distance_time = list(filter(lambda x: len(x[0]) > 30 ,  _temp_))
             if len(distance_time) == 0:
                 continue 
             cut  = len(min (distance_time, key= lambda x: len(x[0]) )[0])
-            print(distance_time[0])
+            # print(distance_time[0])
             distance_time = map( lambda x : x[0][:cut], distance_time)
  
             distance_time = np.array( list(distance_time) )
-            print(distance_time.shape)
+            # print(distance_time.shape)
             if len(distance_time) < 9:
                 continue
 
@@ -268,6 +302,8 @@ def test_read():
             plt.clf()
             # fig  = plt.gcf()
             plt.plot(np.mean( distance_time, axis=0))
+
+
             plt.title(  r' $ E [ r ] $ as function of time '  )
             plt.xlabel(r'time [ 4 - frame ]')
             plt.ylabel(r'$r$ [px]')
