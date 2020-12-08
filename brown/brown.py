@@ -335,6 +335,13 @@ def calculate_average( distance_time ):
                 N += 1
         if N > 0:
             ret += (temp/N).tolist() 
+
+    # try:
+    T = np.array(list(map(lambda c : c[0][:20],\
+        list(filter( lambda x : len(x[0]) > 20, distance_time)))))
+    
+    return np.mean(T, axis=0)
+
     return np.array(ret)
 
 
@@ -467,8 +474,8 @@ def test_read():
             fig.suptitle( r'graphs for first (make sense) nine particales, $ | X_{t+1}  - X_{t} | < \varepsilon $' )
             
             for _ in range(3):
-                axs[2, _].set_xlabel(r'time [ 4 - frame ]')
-                axs[_, 0].set_ylabel(r'$r$ [px]')
+                axs[2, _].set_xlabel(r'time [ frames ]')
+                axs[_, 0].set_ylabel(r'$ r^2 $ [px]')
 
             for i in range(3):
                 for j in range(3):
@@ -481,11 +488,11 @@ def test_read():
             # plt.close()
             plt.clf()
             # fig  = plt.gcf()
-            plt.plot( calculate_average(distance_time) )
+            plt.plot( calculate_average(distance_time))
 
 
-            plt.title(  r' $ E [ r ] $ as function of time '  )
-            plt.xlabel(r'time [ 4 - frame ]')
+            plt.title(  r' $ E [ r^2 ] $ as function of time '  )
+            plt.xlabel(r'time [ frames ]')
             plt.ylabel(r'$r$ [px]')
             plt.axis('equal')
             fig.savefig("./fig/E-{0}.png".format(testcases[0]))
