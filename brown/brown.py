@@ -43,7 +43,7 @@ testcases_exp = [[ "t" + clip +"{0}{1}.png".format("0" * (5 - len(str(1*_)))   ,
 
 # testcasesout = [ "rect10p20g.avi000{0}.png".format(_) for _ in range(10) ]
 
-EPS = 20
+EPS = 9
 
 COLORS = set()
 class particale():
@@ -262,11 +262,11 @@ def find_matching(prev_particals, particals):
         
         if len(options) > 0 :
             option = min( options , key= lambda current: massdiff( current, prev) )
-            if np.sqrt(prev.distance( option )) < EPS : 
+            # if prev.distance( option ) < EPS : 
                 # if massdiff(option.prev, option) >  prev.distance( option ):
                     #(option.prev is None) or
-                prev.concate( option )
-                not_matched = False
+            prev.concate( option )
+            not_matched = False
         if not_matched:
             shallcopy = prev.shellcopy()
             # prev.concate( shallcopy )
@@ -426,7 +426,8 @@ def test_read():
             # reasonable = reduce_mean_mean( reasonable )  
 
 
-            _temp_ = list(map(calculate_time_distance, reasonable))
+            # distance_time 
+            _temp_= list(map(calculate_time_distance, reasonable))
             # print(_temp_)
             # print(len(_temp_))
 
