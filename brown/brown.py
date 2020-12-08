@@ -16,15 +16,36 @@ HISTS = 0, 1000
 
 # numberofcases = 10
 
+testcases_exp = [[ "t" + clip +"{0}{1}.png".format("0" * (5 - len(str(1*_)))   , 1 * _)\
+     for _ in range(1, 100) ] for clip in\
+         [ 
+            "10p0g22c.avi.avi",
+            "10p0gsec.avi",
+            "10p10g.avi.avi",
+            "10p20g.avi",
+            "10p35g.avi",
+            "10p50g.avi",
+            "10p60g.avi",
+            "10p75g.avi",
+            "10p85g.avi",
+            "10p95g22.7c.avi.avi",
+            "10p98g22.6.avi.avi",
+            "10ppure.avi.avi",
+            "10ppuresec2.avi",
+            "10ppuresec3.avi",
+            "10ppuresec4.avi",
+            "10ppuresec5.avi",
+            "straigh2t10ppure.avi",
+            "straight10ppure.avi.avi"
+         ]\
+        ]
 
-testcases_exp = [[  clip +".avi{0}{1}.png".format("0" * (5 - len(str(3*_)))   , 3 * _) for _ in range(1, 40) ] for clip in [ "tstraigh2t10ppure", "t10p10g.avi", "t10p20g", "t10p35g", "t10p50g", "t10p60g", "t10p75g", "t10p85g" ]]
 
-testcasesout = [ "rect10p20g.avi000{0}.png".format(_) for _ in range(10) ]
+# testcasesout = [ "rect10p20g.avi000{0}.png".format(_) for _ in range(10) ]
 
 EPS = 100
 
 COLORS = set()
-
 class particale():
 
     
@@ -41,6 +62,15 @@ class particale():
         self.id = particale.id
         particale.id += 1
 
+    # def matrix_representation(self):
+    #     _maxx, _maxy = np.max( self.x ), np.max( self.y ) 
+    #     _minx, _miny = np.min( self.x ), np.min( self.y )
+        
+    #     self._matrix =  
+        
+        # pass
+    # def __mul__(self, grades):
+    
     def distance(self, other):
         return np.linalg.norm(self.CM - other.CM)
 
@@ -89,6 +119,22 @@ class particale():
             temp.CM[1] -= _mean[1]
             temp = temp.next
 
+
+
+def leaves_generator( particales_frames_array ):
+        
+        # flatten the list : 
+        _map =  { _particale.id : _particale for  particales_frame in particales_frames_array for _particale in particales_frame  }
+
+        while len(_map) > 0:
+            _id, _particale = _map.popitem() 
+            while _particale.prev != None and _particale.id in _map:
+                del _map [ _particale.id ] 
+                _particale = _particale.prev
+            if _particale.id in _map:
+                del _map [ _particale.id ]
+            yield _particale            
+
 def reduce_mean_mean(particales):
     X_mean, Y_mean = [], [] 
     for _particale in particales:
@@ -107,7 +153,7 @@ def reduce_mean_mean(particales):
 def reasonable_kernel(_particale):
     temp = _particale
     while temp.next != None: 
-        if temp.distance( temp.next  ) > 10: 
+        if temp.distance( temp.next  ) > 20: 
             if temp.prev is None:
                 return None
             else:
@@ -233,9 +279,38 @@ def padding_list_with_nan(lists):
     maxlen = max(lists, key = len(lists) )
 
 
+def calculate_average( distance_time ):
+    '''
+        when our limits of the arrays are not equal
+
+        E [ x ... x_n  ], E [ x ... x_n-1  ], ..
+    '''
+    _indices = sorted( [ len(_arr[0]) for _arr in distance_time ] )
+
+    indices = [ _indices[0] ]
+    for val in _indices[1:]:
+        if val != indices[-1]:
+            indices.append( val ) 
+     
+    left, right = indices[:-2] , indices[1:] 
+    ret = [ ]
+    for x,y in zip(left, right):
+        N = 0
+        temp = np.zeros(y-x)
+        for case in distance_time:
+            if len(case[0]) >= y:
+                temp += np.array(case[0][x:y])
+                N += 1
+        if N > 0:
+            ret += (temp/N).tolist() 
+        # if N > 0:
+            # ret.append( temp / N )
+    print(ret)
+    return np.array(ret)
+
 def test_read():
     _arr = [ ]
-    for w, testcases in  enumerate(testcases_exp):
+    for w, testcases in  enumerate(testcases_exp[1:]):
         particales_frames = [ ]
         if not Path("pickleout{0}.pkl".format(w)).exists():
             for j, testcase in enumerate( testcases ):
@@ -261,8 +336,13 @@ def test_read():
             dump(particales_frames,open("pickleout{0}.pkl".format(w) , "wb+"))
         else:
             particales_frames = load(open("pickleout{0}.pkl".format(w) , "rb"))
+            
+            # for i in range(len(particales_frames)-3):
+            #     find_matching( particales_frames[i], particales_frames[i+1] )
+            
+            
             # print(particales_frames[0][-1].CM)
-            particales_mass_list, massbins  = quantenize_mass(particales_frames[0])  
+            particales_mass_list, massbins  = quantenize_mass( list(leaves_generator(particales_frames)))  
             
             for massindex, mass in enumerate(massbins):
 
@@ -277,14 +357,17 @@ def test_read():
 
                 _temp_ = list(map(calculate_time_distance, reasonable))
                 # print(_temp_)
-                distance_time = list(filter(lambda x: len(x[0]) > 30 ,  _temp_))
+                # print(len(_temp_))
+
+                distance_time = list(filter(lambda x: len(x[0]) > 10 ,  _temp_))
+
+                print(len(distance_time))
                 if len(distance_time) == 0:
                     continue 
-                cut  = len(min (distance_time, key= lambda x: len(x[0]) )[0])
+
+
                 # print(distance_time[0])
-                distance_time = map( lambda x : x[0][:cut], distance_time)
     
-                distance_time = np.array( list(distance_time) )
                 # print(distance_time.shape)
                 # if len(distance_time) < 9:
                 #     continue
@@ -318,7 +401,7 @@ def test_read():
                 for i in range(3):
                     for j in range(3):
                         if i*3 + j < len(distance_time):
-                            axs[i, j].plot(distance_time[i*3 + j].copy())
+                            axs[i, j].plot(distance_time[i*3 + j][0].copy())
                 
 
                 fig.savefig("./fig/9-{0}-M{1}.png".format(testcases[0], mass))
@@ -326,7 +409,7 @@ def test_read():
                 # plt.close()
                 plt.clf()
                 # fig  = plt.gcf()
-                plt.plot(np.mean( distance_time, axis=0))
+                plt.plot( calculate_average(distance_time) )
 
 
                 plt.title(  r' $ E [ r ] $ as function of time '  )
