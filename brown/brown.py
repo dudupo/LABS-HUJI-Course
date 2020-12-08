@@ -43,7 +43,7 @@ testcases_exp = [[ "t" + clip +"{0}{1}.png".format("0" * (5 - len(str(1*_)))   ,
 
 # testcasesout = [ "rect10p20g.avi000{0}.png".format(_) for _ in range(10) ]
 
-EPS = 100
+EPS = 20
 
 COLORS = set()
 class particale():
@@ -118,6 +118,10 @@ class particale():
             temp.CM[0] -= _mean[0]
             temp.CM[1] -= _mean[1]
             temp = temp.next
+    
+    def shellcopy(self):
+        return particale( zip( self.x.tolist(), self.y.tolist() ))
+         
 
 
 
@@ -186,6 +190,7 @@ def define_limit():
     pass
 
 
+
 def frame_iterator(frame):
     for x in range(frame.shape[0]):
         for y in range(frame.shape[1]):
@@ -242,17 +247,41 @@ def rect_object(_obj, frameRGB):
         set_red(frameRGB[HISTS[0] + x1][HISTS[1] + y]) 
         set_red(frameRGB[HISTS[0] + x2][HISTS[1] + y])
 
+
+MASSEPS = 50
 def find_matching(prev_particals, particals):
     '''
         find match between pair of ascending frames 
     '''    
     for prev in prev_particals:
-        option = min(particals, key= lambda current: prev.distance(current))
-        if np.sqrt(prev.distance( option )) < EPS : 
-            if (option.prev is None) or option.distance(option.prev ) >  prev.distance( option ):
-                prev.concate( option )
+        options = list(filter( lambda x : np.abs( len(x.x) - len(prev.x) ) < MASSEPS, particals))
+        
+        not_matched = True
+        
+        if len(options) > 0 :
+            option = min( options , key= lambda current: prev.distance( current))
+            if np.sqrt(prev.distance( option )) < EPS : 
+                if (option.prev is None) or option.distance(option.prev ) >  prev.distance( option ):
+                    prev.concate( option )
+                    not_matched = False
+        if not_matched:
+            shallcopy = prev.shellcopy()
+            # prev.concate( shallcopy )
+            # particals.append( shallcopy )
 
-
+def create_matching_net(particales_frames_array, _estimate_func):
+    
+    def handle_adjacent_frames(prev_particals, particals):
+        ret = np.zeros( shape = ( len(prev_particals), len(particals) ) )
+        for (i,j), _val in np.ndenumerate(ret): 
+            ret[i,j] = _estimate_func(  prev_particals[i], particals[j] )
+        return ret
+    prev_particals_lists, particals_lists = particales_frames_array[:-2], particales_frames_array[1]
+    for prev_particals, particals in zip ( prev_particals_lists, particals_lists ):
+        _matrix = handle_adjacent_frames(prev_particals, particals)
+        for (i,j), _val in np.ndenumerate(_matrix):
+            pass
+    pass
 
 def plot_graphs():
     '''
@@ -303,9 +332,6 @@ def calculate_average( distance_time ):
                 N += 1
         if N > 0:
             ret += (temp/N).tolist() 
-        # if N > 0:
-            # ret.append( temp / N )
-    print(ret)
     return np.array(ret)
 
 def test_read():
@@ -337,87 +363,87 @@ def test_read():
         else:
             particales_frames = load(open("pickleout{0}.pkl".format(w) , "rb"))
             
-            # for i in range(len(particales_frames)-3):
-            #     find_matching( particales_frames[i], particales_frames[i+1] )
+            for i in range(len(particales_frames)-2):
+                find_matching( particales_frames[i], particales_frames[i+1] )
             
             
             # print(particales_frames[0][-1].CM)
-            particales_mass_list, massbins  = quantenize_mass( list(leaves_generator(particales_frames)))  
+            # particales_mass_list, massbins  = quantenize_mass( list(leaves_generator(particales_frames)))  
             
-            for massindex, mass in enumerate(massbins):
+            # for massindex, mass in enumerate(massbins):
 
-                reasonable = list(map(reasonable_kernel, particales_mass_list[massindex]))
-                reasonable = list(filter( lambda x : x != None, reasonable))
+            reasonable = list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
+            reasonable = list(filter( lambda x : x != None, reasonable))
 
-                # reasonable = list(filter( lambda p: len(p.x) < 16, reasonable))
-                print("reasonable size = ", len(reasonable) )
+            # reasonable = list(filter( lambda p: len(p.x) < 16, reasonable))
+            print("reasonable size = ", len(reasonable) )
 
-                reasonable = reduce_mean_mean( reasonable )  
-
-
-                _temp_ = list(map(calculate_time_distance, reasonable))
-                # print(_temp_)
-                # print(len(_temp_))
-
-                distance_time = list(filter(lambda x: len(x[0]) > 10 ,  _temp_))
-
-                print(len(distance_time))
-                if len(distance_time) == 0:
-                    continue 
+            # reasonable = reduce_mean_mean( reasonable )  
 
 
-                # print(distance_time[0])
-    
-                # print(distance_time.shape)
-                # if len(distance_time) < 9:
-                #     continue
+            _temp_ = list(map(calculate_time_distance, reasonable))
+            # print(_temp_)
+            # print(len(_temp_))
 
-                fig, axs = plt.subplots(3, 3)
-                # axs[0, 0].plot(x, y)
-                # axs[0, 0].set_title('Axis [0, 0]')
-                # axs[0, 1].plot(x, y, 'tab:orange')
-                # axs[0, 1].set_title('Axis [0, 1]')
-                # axs[1, 0].plot(x, -y, 'tab:green')
-                # axs[1, 0].set_title('Axis [1, 0]')
-                # axs[1, 1].plot(x, -y, 'tab:red')
-                # axs[1, 1].set_title('Axis [1, 1]')
+            distance_time = list(filter(lambda x: len(x[0]) > 10 ,  _temp_))
 
-                # for ax in axs.flat:
-                #     ax.set(xlabel='x-label', ylabel='y-label')
-
-                # Hide x labels and tick labels for top plots and y ticks for right plots.
-                # for ax in axs.flat:
-                #     ax.label_outer()
-                
-                # import matplotlib 
-                # matplotlib.rcParams['text.usetex'] = True
-
-                fig.suptitle( r'graphs for first (make sense) nine particales, $ | X_{t+1}  - X_{t} | < \varepsilon $' )
-                
-                for _ in range(3):
-                    axs[2, _].set_xlabel(r'time [ 4 - frame ]')
-                    axs[_, 0].set_ylabel(r'$r$ [px]')
-
-                for i in range(3):
-                    for j in range(3):
-                        if i*3 + j < len(distance_time):
-                            axs[i, j].plot(distance_time[i*3 + j][0].copy())
-                
-
-                fig.savefig("./fig/9-{0}-M{1}.png".format(testcases[0], mass))
-                # plt.show()
-                # plt.close()
-                plt.clf()
-                # fig  = plt.gcf()
-                plt.plot( calculate_average(distance_time) )
+            print(len(distance_time))
+            if len(distance_time) == 0:
+                continue 
 
 
-                plt.title(  r' $ E [ r ] $ as function of time '  )
-                plt.xlabel(r'time [ 4 - frame ]')
-                plt.ylabel(r'$r$ [px]')
-                plt.axis('equal')
-                fig.savefig("./fig/E-{0}-{1}.png".format(testcases[0], mass))
-                # plt.show()
+            # print(distance_time[0])
+
+            # print(distance_time.shape)
+            # if len(distance_time) < 9:
+            #     continue
+
+            fig, axs = plt.subplots(3, 3)
+            # axs[0, 0].plot(x, y)
+            # axs[0, 0].set_title('Axis [0, 0]')
+            # axs[0, 1].plot(x, y, 'tab:orange')
+            # axs[0, 1].set_title('Axis [0, 1]')
+            # axs[1, 0].plot(x, -y, 'tab:green')
+            # axs[1, 0].set_title('Axis [1, 0]')
+            # axs[1, 1].plot(x, -y, 'tab:red')
+            # axs[1, 1].set_title('Axis [1, 1]')
+
+            # for ax in axs.flat:
+            #     ax.set(xlabel='x-label', ylabel='y-label')
+
+            # Hide x labels and tick labels for top plots and y ticks for right plots.
+            # for ax in axs.flat:
+            #     ax.label_outer()
+            
+            # import matplotlib 
+            # matplotlib.rcParams['text.usetex'] = True
+
+            fig.suptitle( r'graphs for first (make sense) nine particales, $ | X_{t+1}  - X_{t} | < \varepsilon $' )
+            
+            for _ in range(3):
+                axs[2, _].set_xlabel(r'time [ 4 - frame ]')
+                axs[_, 0].set_ylabel(r'$r$ [px]')
+
+            for i in range(3):
+                for j in range(3):
+                    if i*3 + j < len(distance_time):
+                        axs[i, j].plot(distance_time[i*3 + j][0].copy())
+            
+
+            fig.savefig("./fig/9-{0}.png".format(testcases[0]))
+            # plt.show()
+            # plt.close()
+            plt.clf()
+            # fig  = plt.gcf()
+            plt.plot( calculate_average(distance_time) )
+
+
+            plt.title(  r' $ E [ r ] $ as function of time '  )
+            plt.xlabel(r'time [ 4 - frame ]')
+            plt.ylabel(r'$r$ [px]')
+            plt.axis('equal')
+            fig.savefig("./fig/E-{0}.png".format(testcases[0]))
+            # plt.show()
 
 
 if __name__ == "__main__":
