@@ -254,16 +254,19 @@ def find_matching(prev_particals, particals):
         find match between pair of ascending frames 
     '''    
     for prev in prev_particals:
-        options = list(filter( lambda x : np.abs( len(x.x) - len(prev.x) ) < MASSEPS, particals))
-        
+
+        options = list(filter( lambda current : prev.distance( current) < EPS, particals))
         not_matched = True
+
+        massdiff = lambda x, y : np.abs( len(x.x) - len(y.x) ) 
         
         if len(options) > 0 :
-            option = min( options , key= lambda current: prev.distance( current))
+            option = min( options , key= lambda current: massdiff( current, prev) )
             if np.sqrt(prev.distance( option )) < EPS : 
-                if (option.prev is None) or option.distance(option.prev ) >  prev.distance( option ):
-                    prev.concate( option )
-                    not_matched = False
+                # if massdiff(option.prev, option) >  prev.distance( option ):
+                    #(option.prev is None) or
+                prev.concate( option )
+                not_matched = False
         if not_matched:
             shallcopy = prev.shellcopy()
             # prev.concate( shallcopy )
@@ -334,6 +337,46 @@ def calculate_average( distance_time ):
             ret += (temp/N).tolist() 
     return np.array(ret)
 
+
+def centerofmass_time( particales_frames ):
+    def calc_center_of_mass( particales_frame ):
+        CMx, CMy = 0, 0
+        mass =  0
+        for particale in particales_frame:
+            CMx, CMy = CMx + particale.CM[0] * len(particale.x) , CMy + particale.CM[1] * len(particale.y) 
+            mass += len(particale.x)
+        if mass != 0:
+            return CMx / mass, CMy / mass 
+        else:
+            return 0,0 
+    return list(map( calc_center_of_mass, particales_frames))
+
+def shift_center_mass( particales_frames ):
+    center_list = centerofmass_time( particales_frames )
+    
+    def shift_particale( particale, center ):
+        for _ in range(2):
+            particale.CM[_] -= center[_] 
+
+    for center, frame in zip(center_list, particales_frames):
+        for particale in frame:
+            shift_particale( particale, center)
+        
+def filternoise(particales_frames):
+    ret = [ ]
+    for particales_frame in particales_frames:
+        ret.append( \
+            list(filter(lambda p: len(p.x) > 30, particales_frame )) )
+    return ret
+
+def reset( particales_frames):
+    for particales_frame in particales_frames:
+        for particale in particales_frame:
+            particale.next = None
+            particale.prev = None
+        
+        # reset_frame( particales_frame )
+
 def test_read():
     _arr = [ ]
     for w, testcases in  enumerate(testcases_exp[1:]):
@@ -361,8 +404,11 @@ def test_read():
             imwrite( "out{0}.png".format(w) ,  _arr[-1])
             dump(particales_frames,open("pickleout{0}.pkl".format(w) , "wb+"))
         else:
+            reset(particales_frames)
             particales_frames = load(open("pickleout{0}.pkl".format(w) , "rb"))
-            
+            particales_frames = filternoise(particales_frames )
+            shift_center_mass(particales_frames)
+
             for i in range(len(particales_frames)-2):
                 find_matching( particales_frames[i], particales_frames[i+1] )
             
@@ -371,11 +417,10 @@ def test_read():
             # particales_mass_list, massbins  = quantenize_mass( list(leaves_generator(particales_frames)))  
             
             # for massindex, mass in enumerate(massbins):
-
+            
             reasonable = list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
             reasonable = list(filter( lambda x : x != None, reasonable))
-
-            # reasonable = list(filter( lambda p: len(p.x) < 16, reasonable))
+            # reasonable = list(filter( lambda p: len(p.x) > 5, reasonable))
             print("reasonable size = ", len(reasonable) )
 
             # reasonable = reduce_mean_mean( reasonable )  
