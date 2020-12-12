@@ -12,7 +12,7 @@ WHITE = 255
 
 THRESHOLD = 10
 
-HISTS = 0, 1000
+HISTS = 0, 0
 
 # numberofcases = 10
 
@@ -43,7 +43,7 @@ testcases_exp = [[ "t" + clip +"{0}{1}.png".format("0" * (5 - len(str(1*_)))   ,
 
 # testcasesout = [ "rect10p20g.avi000{0}.png".format(_) for _ in range(10) ]
 
-EPS = 9
+EPS = 5
 
 COLORS = set()
 class particale():
@@ -132,12 +132,14 @@ def leaves_generator( particales_frames_array ):
 
         while len(_map) > 0:
             _id, _particale = _map.popitem() 
-            while _particale.prev != None and _particale.id in _map:
-                del _map [ _particale.id ] 
+            while _particale.prev != None :
+                if _particale.id in _map: 
+                    del _map [ _particale.id ] 
                 _particale = _particale.prev
+            
             if _particale.id in _map:
                 del _map [ _particale.id ]
-            yield _particale            
+                yield _particale            
 
 def reduce_mean_mean(particales):
     X_mean, Y_mean = [], [] 
@@ -170,7 +172,7 @@ def calculate_time_distance(_particale):
     temp = _particale
     ret = [ ]
     while temp.next != None:
-        ret.append( temp.distance( _particale ) )
+        ret.append( temp.distance( _particale )**2 )
         temp = temp.next
     return np.array(ret), np.arange(len(ret))
 
@@ -203,7 +205,7 @@ def marks_objects(frame):
     '''
 
     flags = np.zeros(shape = (frame.shape[0],frame.shape[1]) )
-    def mark_dfs(x,y, _obj = [], depth = 100 ):
+    def mark_dfs(x,y, _obj = [], depth = 400 ):
         if depth > 0 and x < frame.shape[0] and y < frame.shape[1]:   
             if flags[x][y]:
                 return _obj
@@ -216,8 +218,10 @@ def marks_objects(frame):
                 mark_dfs(x,y+1, _obj=_obj, depth = depth -1)
                 mark_dfs(x+1,y, _obj=_obj, depth = depth -1)
                 mark_dfs(x-1,y, _obj=_obj, depth = depth -1)
-                mark_dfs(x,y-1, _obj=_obj, depth = depth -1)
-        
+                return mark_dfs(x,y-1, _obj=_obj, depth = depth -1)
+        else:
+            if depth <= 0:
+                _obj = [ ]
         return _obj
 
     objects = []
@@ -229,6 +233,53 @@ def marks_objects(frame):
 
     return objects
 
+
+def marks_objects_by_given_particales(particales, frame):
+    
+    # def edge(point, frame, _set):
+        
+    def closest(point, frame, _set, ret = [], depth =400, stack = [] ):
+        if depth == 0 :
+            # ret = [ ]
+            return ret
+        
+        directions =   [ [int(point[0] + i), int(point[1] +j)]  for i in range(-1,2) for j in range(-1,2) ] 
+
+        def check( arr, x ):
+            return all(0 <= x[i] and x[i] < arr.shape[i] for i in range(2))
+
+        directions =  list(filter( lambda x : check(_set, x) and _set[ x[0], x[1] ] == 0, directions))
+        
+        for i,j in directions: 
+            _set[i,j] = 1
+
+        points = list(filter(lambda x : frame[x[0]][x[1]][0] < THRESHOLD , directions))
+        
+        if len(points) > 1:
+        
+            stack += points 
+            
+            if len(stack) > 0:
+                _ = closest(stack.pop(0), frame, _set, ret, depth = depth - 1, stack=stack)
+                # if _ is None:
+                    # return None
+        ret += points 
+        return ret
+
+    newparticales = [ ]
+    _set = np.zeros(shape= (frame.shape[0],frame.shape[1]))
+    for _particale in particales:
+        ret = closest(_particale.CM, frame, _set )
+        # print(ret)
+
+        if (ret is not None) and len(ret) > 0 :
+            temp = particale(ret.copy())
+            _particale.concate(temp)
+            temp.prev = _particale 
+            # print("yes")
+            newparticales.append( temp )
+    return newparticales
+
 def rect_object(_obj, frameRGB):
     
     vertex = []
@@ -236,8 +287,6 @@ def rect_object(_obj, frameRGB):
         for _ in [ 0 , 1 ]:  
             vertex.append(func( _obj, key = lambda u : u[_] )[_])
     x1, y1, x2, y2 = vertex
-
-  
 
     for x in range(x1, x2):
         set_red(frameRGB[HISTS[0] + x][HISTS[1] + y1]) 
@@ -248,24 +297,26 @@ def rect_object(_obj, frameRGB):
         set_red(frameRGB[HISTS[0] + x2][HISTS[1] + y])
 
 
-MASSEPS = 50
+MASSEPS = 400
 def find_matching(prev_particals, particals):
     '''
         find match between pair of ascending frames 
     '''    
     for prev in prev_particals:
 
-        options = list(filter( lambda current : prev.distance( current) < EPS, particals))
+        massdiff = lambda x, y : np.abs( len(x.x) - len(y.x) ) 
+        options = list(filter( lambda current : massdiff( current, prev) < MASSEPS, particals))
         not_matched = True
 
-        massdiff = lambda x, y : np.abs( len(x.x) - len(y.x) ) 
         
-        if len(options) > 0 :
-            option = min( options , key= lambda current: massdiff( current, prev) )
+        if len(options) > 0 :        
+            for option in sorted( options , key= lambda current: prev.distance(current) ):
             # if prev.distance( option ) < EPS : 
                 # if massdiff(option.prev, option) >  prev.distance( option ):
                     #(option.prev is None) or
-            prev.concate( option )
+                if prev.distance(option) < EPS and option.prev == None :
+                    prev.concate( option )
+                    continue
             not_matched = False
         if not_matched:
             shallcopy = prev.shellcopy()
@@ -323,7 +374,11 @@ def calculate_average( distance_time ):
     for val in _indices[1:]:
         if val != indices[-1]:
             indices.append( val ) 
-     
+    print(indices)
+
+    if len(indices) == 1:
+        return np.var(np.array(distance_time)[:,0]**0.5, axis=0)
+
     left, right = indices[:-2] , indices[1:] 
     ret = [ ]
     for x,y in zip(left, right):
@@ -334,13 +389,13 @@ def calculate_average( distance_time ):
                 temp += np.array(case[0][x:y])
                 N += 1
         if N > 0:
-            ret += (temp/N).tolist() 
+            ret += (temp/(N**2)).tolist() 
 
     # try:
-    T = np.array(list(map(lambda c : c[0][:20],\
-        list(filter( lambda x : len(x[0]) > 20, distance_time)))))
+    # T = np.array(list(map(lambda c : c[0][:20],\
+    #     list(filter( lambda x : len(x[0]) > 20, distance_time)))))
     
-    return np.mean(T, axis=0)
+    # return np.mean(T, axis=0)
 
     return np.array(ret)
 
@@ -373,7 +428,7 @@ def filternoise(particales_frames):
     ret = [ ]
     for particales_frame in particales_frames:
         ret.append( \
-            list(filter(lambda p: len(p.x) > 30, particales_frame )) )
+            list(filter(lambda p: len(p.x) > 10 and len(p.x) < 100, particales_frame )) )
     return ret
 
 def reset( particales_frames):
@@ -384,6 +439,49 @@ def reset( particales_frames):
         
         # reset_frame( particales_frame )
 
+
+def naive_distance_over_frames(_frames):
+    def naive_distance_pair_frames(oneframe, secondframe, center):
+        
+        _len = min (len(oneframe), len(secondframe))
+
+        def naive_distance( _frame ):
+            ret = 0 
+
+            for _particale in sorted( _frame, key = lambda p : -len(p.x) )[:_len]: 
+                # print(_particale.CM ,center)
+                ret += np.linalg.norm( _particale.CM - center )**2
+            return ret
+        return (naive_distance(secondframe) - naive_distance(oneframe) )/ (_len**2)
+    
+    center = _frames[0][0].CM 
+    print(center)
+    first = _frames[0]
+    ret = []
+    for _frame in _frames[1:]:
+        if len(_frame) > 0 :
+            ret.append( naive_distance_pair_frames(first, _frame, center))
+    return np.array(ret)
+
+def fix_seq( sequence ):
+    
+    '''
+        drop an element if it differ from his precssdor by amount grater then then 
+        the treshold.
+    '''
+    factor = 100
+    treshold = factor * (sequence[-1] - sequence[0] ) / len(sequence) 
+    indices = np.abs(sequence - np.roll(sequence, shift=1)) < treshold 
+    return sequence[indices]
+
+def plot_aside_fix(sequence):
+    fig, axs = plt.subplots(1, 2)
+    axs[0].plot(sequence) 
+    axs[1].plot(fix_seq(sequence))
+    return fig, axs
+
+from scipy.ndimage import gaussian_filter
+
 def test_read():
     _arr = [ ]
     for w, testcases in  enumerate(testcases_exp[1:]):
@@ -392,13 +490,19 @@ def test_read():
             for j, testcase in enumerate( testcases ):
                 if Path(testcase).exists():
                     _arr.append( imread(testcase))
-                    _objs = marks_objects(_arr[-1][:,HISTS[1]:1400])
-                    particales_frames.append(  create_particales(_objs)  )
+                    if len( particales_frames ) == 0 :
+                        _objs = marks_objects( _arr[-1][:,:2000]) #gaussian_filter(_arr[-1], sigma=3) )
+                        particales_frames.append(  create_particales(_objs)  )
+                        
                     # for _obj in _objs:
                     #     rect_object(_obj, _arr[-1])
                     #     imwrite( testcasesout[j],  _arr[-1])
-                    if len( particales_frames ) > 1:
-                        find_matching( particales_frames[-2], particales_frames[-1] )
+                    if len( particales_frames ) > 0:
+                        _objs = marks_objects_by_given_particales(\
+                            particales_frames[-1],  _arr[-1][:,:2000])#  gaussian_filter(_arr[-1][:,:2000], sigma=3))
+                        particales_frames.append(  _objs  )
+                        # find_matching( particales_frames[-2], particales_frames[-1] )
+                    particales_frames = filternoise(particales_frames )
                 else:
                     print("path {0} doesn't exists".format(testcase))
 
@@ -407,42 +511,48 @@ def test_read():
                     particale.draw_arrow(_arr[-1])
 
 
-            plt.imshow(_arr[-1])
+            # plt.imshow(_arr[-1])
+            # plt.show()
             imwrite( "out{0}.png".format(w) ,  _arr[-1])
             dump(particales_frames,open("pickleout{0}.pkl".format(w) , "wb+"))
         else:
-            reset(particales_frames)
             particales_frames = load(open("pickleout{0}.pkl".format(w) , "rb"))
+            # reset(particales_frames)
             particales_frames = filternoise(particales_frames )
-            shift_center_mass(particales_frames)
 
-            for i in range(len(particales_frames)-2):
-                find_matching( particales_frames[i], particales_frames[i+1] )
+            # for i in range(len(particales_frames)-2):
+            #     find_matching( particales_frames[i], particales_frames[i+1] )
             
+            # shift_center_mass(particales_frames)
             
             # print(particales_frames[0][-1].CM)
             # particales_mass_list, massbins  = quantenize_mass( list(leaves_generator(particales_frames)))  
             
             # for massindex, mass in enumerate(massbins):
+            # reasonable = particales_frames[5]
             
-            reasonable = list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
-            reasonable = list(filter( lambda x : x != None, reasonable))
+            
+            reasonable = particales_frames[5] # list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
+            
+            if len(reasonable) < 2:
+                continue
+            # reasonable = list(filter( lambda x : x != None, reasonable))
             # reasonable = list(filter( lambda p: len(p.x) > 5, reasonable))
-            print("reasonable size = ", len(reasonable) )
+            # print("reasonable size = ", len(reasonable) )
 
             # reasonable = reduce_mean_mean( reasonable )  
 
 
             # distance_time 
-            _temp_= list(map(calculate_time_distance, reasonable))
+            distance_time =  list(map(calculate_time_distance, reasonable))
             # print(_temp_)
             # print(len(_temp_))
 
-            distance_time = list(filter(lambda x: len(x[0]) > 10 ,  _temp_))
+            # distance_time = list(filter(lambda x: len(x[0]) > 10 ,  _temp_))
 
-            print(len(distance_time))
-            if len(distance_time) == 0:
-                continue 
+            # print(len(distance_time))
+            # if len(distance_time) == 0:
+            #     continue 
 
 
             # print(distance_time[0])
@@ -487,14 +597,14 @@ def test_read():
             # plt.show()
             # plt.close()
             plt.clf()
-            # fig  = plt.gcf()
-            plt.plot( calculate_average(distance_time))
-
+            fig  = plt.gcf()
+            # fig, _  = plot_aside_fix( naive_distance_over_frames(particales_frames))
+            plt.plot( calculate_average(distance_time ) )
 
             plt.title(  r' $ E [ r^2 ] $ as function of time '  )
             plt.xlabel(r'time [ frames ]')
             plt.ylabel(r'$r$ [px]')
-            plt.axis('equal')
+            # plt.axis('equal')
             fig.savefig("./fig/E-{0}.png".format(testcases[0]))
             # plt.show()
 
