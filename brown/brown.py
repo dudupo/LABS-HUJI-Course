@@ -10,6 +10,16 @@ from pathlib import Path
 BLACK = 0
 WHITE = 255
 
+global ind
+ind = 0
+
+global x_arr, y_arr, r_arr
+r_arr = np.array([])
+x_arr = np.array([])
+y_arr = np.array([])
+
+
+
 THRESHOLD = 10
 
 HISTS = 0, 0
@@ -158,23 +168,74 @@ def reduce_mean_mean(particales):
 
 def reasonable_kernel(_particale):
     temp = _particale
-    while temp.next != None: 
-        if temp.distance( temp.next  ) > 20: 
+    frames = 1
+    while temp.next != None:
+        if temp.distance( temp.next  ) > 30:
             if temp.prev is None:
                 return None
             else:
                 temp.prev.next = None
                 return _particale
         temp = temp.next
+        frames += 1
+    if frames < 10:
+        return None
     return _particale
 
 def calculate_time_distance(_particale):
+    global ind, x_arr, y_arr, r_arr
     temp = _particale
-    ret = [ ]
+    retx = [_particale.CM[0]]
+    rety = [_particale.CM[1]]
+    frames = 1
     while temp.next != None:
-        ret.append( temp.distance( _particale )**2 )
+        retx.append( temp.next.CM[0] )
+        rety.append( temp.next.CM[1] )
+        frames += 1
         temp = temp.next
-    return np.array(ret), np.arange(len(ret))
+    batch = 50
+    if frames <= batch - 1:
+        return retx, rety
+    retx = np.array(retx)
+    rety = np.array(rety)
+    retr = np.sqrt(np.power(retx,2) + np.power(rety,2))
+    rem = np.mod(frames, batch)
+    if rem != 0:
+        retx = retx[:-rem]
+        rety = rety[:-rem]
+        retr = retr[:-rem]
+    # print("frames num: ", frames)
+    retx = retx.reshape(-1, batch)
+    retr = retr.reshape(-1, batch)
+    rety = rety.reshape(-1, batch)
+    aaa = lambda p: p - p[0]
+    retx = np.apply_along_axis(aaa, 1, retx)
+    rety = np.apply_along_axis(aaa, 1, rety)
+    retr = np.apply_along_axis(aaa, 1, retr)
+    if x_arr.size == 0:
+        x_arr = retx
+        y_arr = rety
+        r_arr = retr
+    else:
+        x_arr = np.concatenate((x_arr, retx), axis=0)
+        y_arr = np.concatenate((y_arr, rety), axis=0)
+        r_arr = np.concatenate((r_arr, retr), axis=0)
+
+
+
+
+    # retx = np.apply_along_axis(np.var, 0, retx)
+    # rety = np.apply_along_axis(np.var, 0, rety)
+    # if ind < 5:
+    #     plt.plot(retx)
+    #     plt.title('variances as function of time, x axis, batch size=20 ' + str(ind))
+    #     plt.show()
+    #     plt.plot(rety)
+    #     plt.title('variances as function of time, y axis, batch size=20 ' + str(ind))
+    #     plt.show()
+    # ind += 1
+    return retx, rety
+
 
 def set_red( v ):   
     v[0], v[1], v[2] = 255, 0, 0
@@ -428,7 +489,8 @@ def filternoise(particales_frames):
     ret = [ ]
     for particales_frame in particales_frames:
         ret.append( \
-            list(filter(lambda p: len(p.x) > 10 and len(p.x) < 100, particales_frame )) )
+            list(filter(lambda p: len(p.x) > 10 and len(p.x) < 50, particales_frame )) )
+
     return ret
 
 def reset( particales_frames):
@@ -483,6 +545,7 @@ def plot_aside_fix(sequence):
 from scipy.ndimage import gaussian_filter
 
 def test_read():
+    global x_arr, y_arr, r_arr
     _arr = [ ]
     for w, testcases in  enumerate(testcases_exp[1:]):
         particales_frames = [ ]
@@ -536,15 +599,51 @@ def test_read():
             
             if len(reasonable) < 2:
                 continue
+
+            # reasonable = list(map(reasonable_kernel, particales_frames[0]))
+            temp = []
+            for p in reasonable:
+                if p != None:
+                    temp.append(p)
+            reasonable = temp
             # reasonable = list(filter( lambda x : x != None, reasonable))
             # reasonable = list(filter( lambda p: len(p.x) > 5, reasonable))
             # print("reasonable size = ", len(reasonable) )
 
             # reasonable = reduce_mean_mean( reasonable )  
 
-
+            print(len(reasonable))
             # distance_time 
             distance_time =  list(map(calculate_time_distance, reasonable))
+    print(x_arr.shape)
+    from scipy.stats import describe
+    # print(describe(x_arr.T[1][:]))
+    # print(describe(y_arr.T[1][:]))
+    print(np.min(x_arr), np.max(x_arr))
+    print(np.min(y_arr), np.max(y_arr))
+
+    retx = np.apply_along_axis(np.var, 0, x_arr)
+    rety = np.apply_along_axis(np.var, 0, y_arr)
+    retr = np.apply_along_axis(np.var, 0, r_arr)
+
+    plt.plot(2.5*retr)
+    plt.axis('square')
+    # plt.gca().set_aspect('equal', adjustable='box')
+    plt.title('variances as function of time, r, batch size=50')
+    plt.show()
+
+    plt.plot(4*retx)
+    plt.axis('square')
+    # plt.gca().set_aspect('equal', adjustable='box')
+    plt.title('variances as function of time, x axis, batch size=50')
+    plt.show()
+    plt.plot(2.5*rety)
+    plt.axis('square')
+
+    # plt.gca().set_aspect('equal', adjustable='box')
+    plt.title('variances as function of time, y axis, batch size=50')
+    plt.show()
+            # ind += 1
             # print(_temp_)
             # print(len(_temp_))
 
@@ -561,7 +660,7 @@ def test_read():
             # if len(distance_time) < 9:
             #     continue
 
-            fig, axs = plt.subplots(3, 3)
+            # fig, axs = plt.subplots(3, 3)
             # axs[0, 0].plot(x, y)
             # axs[0, 0].set_title('Axis [0, 0]')
             # axs[0, 1].plot(x, y, 'tab:orange')
@@ -581,31 +680,36 @@ def test_read():
             # import matplotlib 
             # matplotlib.rcParams['text.usetex'] = True
 
-            fig.suptitle( r'graphs for first (make sense) nine particales, $ | X_{t+1}  - X_{t} | < \varepsilon $' )
-            
-            for _ in range(3):
-                axs[2, _].set_xlabel(r'time [ frames ]')
-                axs[_, 0].set_ylabel(r'$ r^2 $ [px]')
+            # fig.suptitle( r'graphs for first (make sense) nine particales x values, $ | X_{t+1}  - X_{t} | < \varepsilon $' )
+            #
+            # for _ in range(3):
+            #     axs[2, _].set_xlabel(r'time [ frames ]')
+            #     axs[_, 0].set_ylabel(r'$ r^2 $ [px]')
+            #
+            # for i in range(3):
+            #     for j in range(3):
+            #         if i*3 + j < len(distance_time):
+            #             axs[i, j].plot(distance_time[i*3 + j][0].copy())
+            #
 
-            for i in range(3):
-                for j in range(3):
-                    if i*3 + j < len(distance_time):
-                        axs[i, j].plot(distance_time[i*3 + j][0].copy())
-            
-
-            fig.savefig("./fig/9-{0}.png".format(testcases[0]))
+            # fig.savefig("./fig/9-{0}.png".format(testcases[0]))
             # plt.show()
             # plt.close()
-            plt.clf()
-            fig  = plt.gcf()
+            # plt.clf()
+            # fig  = plt.gcf()
             # fig, _  = plot_aside_fix( naive_distance_over_frames(particales_frames))
-            plt.plot( calculate_average(distance_time ) )
 
-            plt.title(  r' $ E [ r^2 ] $ as function of time '  )
-            plt.xlabel(r'time [ frames ]')
-            plt.ylabel(r'$r$ [px]')
+
+
+
+            # plt.plot( calculate_average(distance_time ) )
+            #
+            #
+            # plt.title(  r' $ E [ r^2 ] $ as function of time '  )
+            # plt.xlabel(r'time [ frames ]')
+            # plt.ylabel(r'$r$ [px]')
             # plt.axis('equal')
-            fig.savefig("./fig/E-{0}.png".format(testcases[0]))
+            # fig.savefig("./fig/E-{0}.png".format(testcases[0]))
             # plt.show()
 
 
