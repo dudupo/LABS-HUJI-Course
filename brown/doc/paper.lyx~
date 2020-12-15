@@ -299,6 +299,13 @@ customHeadersFooters
  המסה והרדיוס המוצצעים.
 \end_layout
 
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 0
 \numeric on
@@ -309,19 +316,12 @@ customHeadersFooters
 \end_layout
 
 \begin_layout Standard
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset Graphics
 	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/9-tstraigh2t10ppure.avi00001.png.png
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
 \begin_inset Graphics
 	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/9-t10p20g.avi00001.png.png
 
@@ -333,6 +333,57 @@ customHeadersFooters
 \begin_layout Standard
 \begin_inset Graphics
 	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10ppure.avi.avi00001.png.png
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p10g.avi.avi00001.png.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p20g.avi00001.png.png
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p35g.avi00001.png.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p50g.avi00001.png.png
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p60g.avi00001.png.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p75g.avi00001.png.png
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p98g22.6.avi.avi00001.png.png
 
 \end_inset
 

@@ -268,7 +268,42 @@ customHeadersFooters
 
 \begin_layout Subsubsection
 עניין הסחף, לדעתי אפשר לשים פה גם עניין של רזוננס.
- פתרי
+ פתירת משוואת הדיפוסיה תחת תנאי התפסות על השפה, צריכים לתת תיקון כי לא יתכן
+ שזה ישאף להיות כמו 
+\begin_inset Formula $e^{-t}$
+\end_inset
+
+ אלה צריך להתייצב על משהו ) לחומר אין לאן לברוח (.
+ הפתרון הוא כמובן חקר המערכת רק בסדר ראשון )חלוקה לבאנצ'יפ(.
+\end_layout
+
+\begin_layout Subsubsection
+עניין הרעש, בדגימה.
+ )שימוש בפילטרים וכל העניין(.
+\end_layout
+
+\begin_layout Subsubsection
+עניין השידוכים לדבר תחילה על שימוש ב 
+\begin_inset Formula $DFS$
+\end_inset
+
+ ו דגימה פר פריים, ואז על המעבר אל 
+\begin_inset Formula $BFS$
+\end_inset
+
+ ושמוש במרכזי המסה שמצאנו כנקודות מוצא לחיפוש.
+\end_layout
+
+\begin_layout Subsubsection
+התייחסות לכך שהמסות ונהפחים אינם בהכרח כדורים, ולכן אנו מצפים לקבל עבור
+ המסה והרדיוס המוצצעים.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -278,6 +313,108 @@ customHeadersFooters
 \numeric off
 % פרוש התוצאות הצגת התוצאות + חישוב שגיאות מקור השגיאות – איך הערכתם אותן
  – מה מקורן – איך התגברתם השוואת התוצאות לתאוריה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/9-tstraigh2t10ppure.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/9-t10p20g.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10ppure.avi.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-tstraight10ppure.avi.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-tstraigh2t10ppure.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p10g.avi.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p20g.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p35g.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p50g.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p60g.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p75g.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p98g22.6.avi.avi00001.png.png
+	scale 65
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
