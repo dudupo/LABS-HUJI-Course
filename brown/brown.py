@@ -201,14 +201,15 @@ def calculate_time_distance(_particale):
     retr = np.sqrt(np.power(retx,2) + np.power(rety,2))
     rem = np.mod(frames, batch)
     if rem != 0:
-        retx = retx[:-rem]
-        rety = rety[:-rem]
-        retr = retr[:-rem]
-    # print("frames num: ", frames)
+        retx = retx[:len(retx)-rem]
+        rety = rety[:len(rety)-rem]
+        retr = retr[:len(retr)-rem]
+    print("frames num: ", frames)
     retx = retx.reshape(-1, batch)
     retr = retr.reshape(-1, batch)
     rety = rety.reshape(-1, batch)
     aaa = lambda p: p - p[0]
+    print(retx)
     retx = np.apply_along_axis(aaa, 1, retx)
     rety = np.apply_along_axis(aaa, 1, rety)
     retr = np.apply_along_axis(aaa, 1, retr)
@@ -595,7 +596,7 @@ def test_read():
             # reasonable = particales_frames[5]
             
             
-            reasonable = particales_frames[5] # list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
+            reasonable = particales_frames[7] # list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
             
             if len(reasonable) < 2:
                 continue
@@ -615,34 +616,33 @@ def test_read():
             print(len(reasonable))
             # distance_time 
             distance_time =  list(map(calculate_time_distance, reasonable))
-    print(x_arr.shape)
-    from scipy.stats import describe
-    # print(describe(x_arr.T[1][:]))
-    # print(describe(y_arr.T[1][:]))
-    print(np.min(x_arr), np.max(x_arr))
-    print(np.min(y_arr), np.max(y_arr))
+            print(x_arr.shape)
+            from scipy.stats import describe
+            # print(describe(x_arr.T[1][:]))
+            # print(describe(y_arr.T[1][:]))
+            if len(x_arr) == 0 :
+                print( "length of x_arr is zero in : {0}".format(testcases[0]) )
+                continue  
+            print(np.min(x_arr), np.max(x_arr))
+            print(np.min(y_arr), np.max(y_arr))
 
-    retx = np.apply_along_axis(np.var, 0, x_arr)
-    rety = np.apply_along_axis(np.var, 0, y_arr)
-    retr = np.apply_along_axis(np.var, 0, r_arr)
+            retx = np.apply_along_axis(np.var, 0, x_arr)
+            rety = np.apply_along_axis(np.var, 0, y_arr)
+            retr = np.apply_along_axis(np.var, 0, r_arr)
 
-    plt.plot(2.5*retr)
-    plt.axis('square')
-    # plt.gca().set_aspect('equal', adjustable='box')
-    plt.title('variances as function of time, r, batch size=50')
-    plt.show()
 
-    plt.plot(4*retx)
-    plt.axis('square')
-    # plt.gca().set_aspect('equal', adjustable='box')
-    plt.title('variances as function of time, x axis, batch size=50')
-    plt.show()
-    plt.plot(2.5*rety)
-    plt.axis('square')
+            for _axis , _retarr in zip(['r' , 'x' , 'y'],[ retr, retx, rety]):
+                fig  = plt.gcf()
+                plt.plot(retr)
+                # plt.axis('square')
+                # plt.gca().set_aspect('equal', adjustable='box')
+                plt.title('variances as function of time, {0}, batch size=50'.format(_axis))
+                fig.savefig("./fig/variances-r-{0}.png".format(testcases[0]))
+                plt.clf()
 
-    # plt.gca().set_aspect('equal', adjustable='box')
-    plt.title('variances as function of time, y axis, batch size=50')
-    plt.show()
+            x_arr = np.array([])
+            y_arr = np.array([])
+            z_arr = np.array([])
             # ind += 1
             # print(_temp_)
             # print(len(_temp_))
