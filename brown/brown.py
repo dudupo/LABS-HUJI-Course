@@ -362,34 +362,44 @@ def padding_list_with_nan(lists):
     maxlen = max(lists, key = len(lists) )
 
 
-def calculate_average( distance_time ):
+def calculate_average( distance_time , bachsize = 12 ):
     '''
         when our limits of the arrays are not equal
 
         E [ x ... x_n  ], E [ x ... x_n-1  ], ..
     '''
-    _indices = sorted( [ len(_arr[0]) for _arr in distance_time ] )
+    
+    distance_time = filter( lambda x : len(x[0]) >= bachsize, distance_time )
+    distance_time = map(lambda x : x[0][:bachsize], distance_time)
+    distance_time = np.array(list(distance_time))
+    if len(distance_time) == 0 :
+        return distance_time
+    print(distance_time)
+    distance_time = np.apply_along_axis(lambda X : X - X[0],  1, distance_time)  
+    return np.mean(distance_time, axis=0) 
 
-    indices = [ _indices[0] ]
-    for val in _indices[1:]:
-        if val != indices[-1]:
-            indices.append( val ) 
-    print(indices)
+    # _indices = sorted( [ len(_arr[0]) for _arr in distance_time ] )
 
-    if len(indices) == 1:
-        return np.var(np.array(distance_time)[:,0]**0.5, axis=0)
+    # indices = [ _indices[0] ]
+    # for val in _indices[1:]:
+    #     if val != indices[-1]:
+    #         indices.append( val ) 
+    # print(indices)
 
-    left, right = indices[:-2] , indices[1:] 
-    ret = [ ]
-    for x,y in zip(left, right):
-        N = 0
-        temp = np.zeros(y-x)
-        for case in distance_time:
-            if len(case[0]) >= y:
-                temp += np.array(case[0][x:y])
-                N += 1
-        if N > 0:
-            ret += (temp/(N**2)).tolist() 
+    # if len(indices) == 1:
+    #     return np.var(np.array(distance_time)[:,0]**0.5, axis=0)
+
+    # left, right = indices[:-2] , indices[1:] 
+    # ret = [ ]
+    # for x,y in zip(left, right):
+    #     N = 0
+    #     temp = np.zeros(y-x)
+    #     for case in distance_time:
+    #         if len(case[0]) >= y:
+    #             temp += np.array(case[0][x:y])
+    #             N += 1
+    #     if N > 0:
+    #         ret += (temp/(N**2)).tolist() 
 
     # try:
     # T = np.array(list(map(lambda c : c[0][:20],\
@@ -482,6 +492,30 @@ def plot_aside_fix(sequence):
 
 from scipy.ndimage import gaussian_filter
 
+
+def cutting_changes(particale, bachsize = 12):
+    
+    ret = []
+    
+    while particale.next != None:
+        if particale.prev != None:
+            particale.prev.next = None
+            particale.prev = None
+        ret.append( particale )
+        for _ in range(bachsize):
+            if particale.next == None:
+                return ret
+            particale = particale.next
+        if particale.next != None:
+            particale = particale.next
+    return ret
+
+def cutting_changes_particales( particales ):
+    ret = []
+    for particale in  particales:
+        ret += cutting_changes( particale )
+    return ret
+
 def test_read():
     _arr = [ ]
     for w, testcases in  enumerate(testcases_exp[1:]):
@@ -533,7 +567,8 @@ def test_read():
             
             
             reasonable = particales_frames[5] # list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
-            
+            reasonable = cutting_changes_particales(reasonable)
+
             if len(reasonable) < 2:
                 continue
             # reasonable = list(filter( lambda x : x != None, reasonable))
