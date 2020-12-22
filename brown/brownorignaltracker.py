@@ -53,9 +53,12 @@ roomtempKelvin  = 294.15
 earthpressure =  101325
 bolzmanfactor = [ ]
 
+
+precents = [ 0, 0.1, 0.2, 0.35, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98 ]
+
 # just for compiling. should take real values.
 viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ],T=roomtempKelvin,P=earthpressure).mu\
-        for p in [ 0, 0.1, 0.2, 0.35, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98 ] ]
+        for p in precents ]
 
 def original_tracker():
     
@@ -77,22 +80,77 @@ def original_tracker():
     print( bolzmanfactor )
     print(np.mean( np.array( bolzmanfactor ) ) / roomtempKelvin)
 
+def generateGeneralTable(  rows ):
+
+    def _generateGeneralTable ( rows ):
+        if len(rows) == 0 :
+            return ""
+        else :
+            return """
+\\begin_layout Plain Layout\n
+{0} 
+\\backslash 
+\\backslash \n
+\\end_layout  """.format(" &".join( rows[0][::-1] ) ) +  _generateGeneralTable(rows[1:])
+
+    return """
+\\begin_layout Standard\n
+\\begin_inset ERT\n
+status open\n
+\\begin_layout Plain Layout\n
+\\backslash
+begin{{center}}\n
+\\end_layout\n
+\\begin_layout Plain Layout\n
+\\backslash
+begin{{tabular}}{{  |{0}| }}\n
+\\end_layout\n
+{1}\n
+\\begin_layout Plain Layout\n
+\\backslash
+end{{tabular}}\n
+\\end_layout\n
+\\begin_layout Plain Layout\n
+\\backslash
+end{{center}}\n
+\\end_layout\n
+\\end_inset\n
+\\end_layout\n
+        """.format( "|".join( ['c'] * len(rows[0]) ) , _generateGeneralTable(rows) )
+
+def stringilize(_arr):
+    return ["{0:.3f}".format(_) for _ in _arr]
+
 def generateTable():
-    return "\\begin{{center}}\n\\begin{{tabular}}{0}\\end{{tabular}}\\end{{center}}".format(\
-          "& ".join(["{0}".format(cell) for cell in viscosities]))
+    return generateGeneralTable([ ["precents"] + stringilize(precents), ["viscosities"] + stringilize(viscosities)]) 
 
+def generateDataTables():
+    ret = [ ]
+    for _filename, viscosity in zip(open( "./csv/files" , "r").readlines()[1:], viscosities):
+        bunch = [ pd.read_csv('./csv/BrownCSV/{0}'.format(_filename.format(letter)[:-1] ),\
+            sep=',',header=None)  for letter in [ 'A', 'B', 'C', 'D'] ]
+
+        for particale in bunch :
+            print(particale)
+            rows = [ particale[_] for _ in range(3) ]
+            #  +  list(map(stringilize,  np.array( [ _[1:] for  _ in particale ] ).transpose()))
+            ret.append( generateGeneralTable(rows) )
+    return "\n".join(ret) 
+        
 def generatelyx( ):
-
-    _generators = { "generateTable\n" : generateTable }
+    _generators = { "generateTable\n" : generateTable, "generateDataTables\n" : generateDataTables }
     _str = ""
-    for line in open( './doc/paper.lyx', 'r', encoding="utf-8" ).readlines():
+    for line in open( './doc/papertemplate.lyx', 'r', encoding="utf-8" ).readlines():
         if line in _generators: 
             _str += _generators[line]()
         else:
             _str += line
 
-    open( './doc/paper.lyx', 'w', encoding="utf-8" ).write( _str )
+    open( './doc/paper.lyx', 'w+', encoding="utf-8" ).write( _str )
+
+
 
 if __name__ == "__main__" :
-    original_tracker()
+    # original_tracker()
     generatelyx()
+# ()
