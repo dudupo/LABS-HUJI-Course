@@ -315,8 +315,8 @@ customHeadersFooters
  – מה מקורן – איך התגברתם השוואת התוצאות לתאוריה
 \end_layout
 
-\begin_layout
-generateTable
+\begin_layout generateTable
+
 \end_layout
 
 \begin_layout Standard
@@ -385,59 +385,8 @@ generateTable
  האם יש לכם אומדן לגודל החלקיקים? האם כל דיפוזיה היא תנועה בראונית?
 \end_layout
 
-
 generateFigsOneParticale
 
-\begin_layout Standard
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p20g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p35g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p50g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p60g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p75g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p98g22.6.avi.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\end_layout
 
 \begin_layout Section
 שיחת סיכום 
@@ -446,8 +395,6 @@ generateFigsOneParticale
 \numeric off
  נקודות על אי-קיומה
 \end_layout
-
-generateDataTables
 
 \end_body
 \end_document

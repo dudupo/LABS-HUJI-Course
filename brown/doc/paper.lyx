@@ -315,63 +315,9 @@ customHeadersFooters
  – מה מקורן – איך התגברתם השוואת התוצאות לתאוריה
 \end_layout
 
-\begin_layout
-
-\begin_layout Standard
-
-\begin_inset ERT
-
-status open
-
-\begin_layout Plain Layout
-
-\backslash
-begin{center}
+\begin_layout generateTable
 
 \end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-begin{tabular}{  |c|c|c|c|c|c|c|c|c|c|c|c| }
-
-\end_layout
-
-
-\begin_layout Plain Layout
-
-0.980 &0.950 &0.900 &0.800 &0.700 &0.600 &0.500 &0.350 &0.200 &0.100 &0.000 &precents 
-\backslash 
-\backslash 
-
-\end_layout  
-\begin_layout Plain Layout
-
-0.666 &0.286 &0.097 &0.023 &0.009 &0.005 &0.003 &0.002 &0.001 &0.001 &0.001 &viscosities 
-\backslash 
-\backslash 
-
-\end_layout  
-
-\begin_layout Plain Layout
-
-\backslash
-end{tabular}
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-end{center}
-
-\end_layout
-
-\end_inset
-
-\end_layout
-
-        \end_layout
 
 \begin_layout Standard
 .הכרות המערכת ומדידה ראשונית: השתמשו במיקרוסקופ לקבלת תמונה איכותית של חלקיק
@@ -438,7 +384,6 @@ end{center}
  מאכל, דיו( וצפו בחזית התקדמות הנוזל לתוך המים.
  האם יש לכם אומדן לגודל החלקיקים? האם כל דיפוזיה היא תנועה בראונית?
 \end_layout
-
 
 \begin_layout
 
@@ -606,56 +551,6 @@ end{center}
 \end_inset
 \end_layout
 
-\begin_layout Standard
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p20g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p35g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p50g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p60g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p75g.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p98g22.6.avi.avi00001.png.png
-	scale 65
-
-\end_inset
-
-
-\end_layout
 
 \begin_layout Section
 שיחת סיכום 
@@ -664,8 +559,6 @@ end{center}
 \numeric off
  נקודות על אי-קיומה
 \end_layout
-
-generateDataTables
 
 \end_body
 \end_document
