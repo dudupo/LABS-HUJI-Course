@@ -153,11 +153,15 @@ def insertFig ( _path  ):
 from os import walk
 
 def generateFigsOneParticale( ):
-    _str = "\\begin_layout\n"
+    _str, i  = "\\begin_layout\n", 0
     for (root,dirs,files) in walk('Fig'): 
-        for _file in files:
+        for _file in files :
             if len(_file) < 18 and "E-r-" in _file : 
                 _str += insertFig( "Fig/" + _file )
+                if i % 2 == 0 and i > 0:
+                    _str += "\n\n\\end_layout\n\n\\begin_layout\n"
+                i += 1
+
     return _str  +"\\end_layout\n"
 
 # "generateDataTables\n" : generateDataTables,

@@ -1,0 +1,127 @@
+בראונית
+
+1 51% תאור הרקע ומטרת הניסוי
+
+הניסוי בוחן תנועה רב חלקיקית, תחת הנחת הארגודיות - לפיה הכוח 
+מתפלג באופן אחיד על כלל המערכת-. ולכן מיצוע שלו יניב \left\langle xF\left(t\right)\right\rangle =0
+. פיתוח מהכיוון הנ“ל יביא למשוואת התנועה הבאה : \left\langle x^{2}\right\rangle =\frac{m}{\alpha}e^{-\frac{\alpha}{m}t}x_{0}^{2}+\frac{2k_{B}T}{\alpha}t
+ נזכיר כי ל \alpha היה יחידות של \left[\frac{m}{t}\right] )קבוע 
+משוואת סטוקס(, אנו מצפים כי למדידה לאחר זמן סביר תזניח את האיבר 
+המעריכי ונקבל את : \frac{2k_{B}T}{6\pi\mu a}t=\frac{2k_{B}T}{\alpha}t=\left\langle r^{2}\right\rangle 
+. מה שמתאים לפיתוח דרך משוואת הדיפוזיה - \frac{\partial}{\partial t}\psi=D\nabla^{2}\psi
+, כאשר \psi היא צפיפות החומר, הפתרון הוא : \psi\left(x\right)=\frac{e^{-\frac{x^{2}}{4Dt}}}{\sqrt{4\pi Dt}}
+ כלומר התפלגות נורמלית ולכן \mathbb{V}\left[x\right]=\mathbb{E}\left[x^{2}\right]=\sqrt{2}Dt
+ ) לבדוק שאכן פקטור \sqrt{2}(. מטרתנו בניסו היא תחילה לאשש תאוריה 
+זאת, כלומר לבדוק האם ההנחת הרגודיות היא סבירה בתנאים של טמפ' החדר 
+וריכוזים שונים של תווחים אותם אנו מערכים כ“סטנדרטים“. לבסוף נשערך 
+את רדיוס החלקיק ) פוליטנן ( עבור חליקיקים מסויימים אחרייהם עקבנו, 
+ואת קבוע הצמיגות )של כל תמיסה(.
+
+2 53% תאור מהלך הניסוי איך הניסוי בוצע - שיטת העבודה בעיות 
+  מיוחדות – איך התגברתם
+
+2.0.1 תיאור טכני של מהלך הניסוי.
+
+כדי לבחון את התנועה הראונית חילקנו את הניסוי לפי ריכוזים שונים. 
+כל ריכוז הכיל כ 10\% חלקיקים, וכ 90\% נוזל, כאשר בכל שלב הנוזל 
+היה אחד מ \left[10\%,\,20\%\,,35\%\,,50\%,\,...\right] ) להוסיף 
+לשנות( . להוסיף טבלה של נפחים וריכוזים. + שגיאת מדידיה וכדומה. כל 
+תרכיז שוכן בין שתי פלטות זכוכית, במטרה לצמצם את דרגת החופש של 
+התנועה בציר ה \hat{z}. נפח כל ריכוז היה כ 40\left[mL\right]. 
+דגמנו סרטונים בהמצאות במקרוסקופ מסוג X, ולו רזלוציה Y. להלן תרשים 
+של הניסוי :
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/20201125_095407.jpg>
+
+2.0.2 תיאור טכני של אלגוריתם, שגיאות. מספרים. )מצבו הסופי(
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/tracker.png>
+
+2.1 משברים
+
+2.1.1 עניין הסחף, לדעתי אפשר לשים פה גם עניין של רזוננס. פתירת 
+  משוואת הדיפוסיה תחת תנאי התפסות על השפה, צריכים לתת תיקון כי לא 
+  יתכן שזה ישאף להיות כמו e^{-t} אלה צריך להתייצב על משהו ) לחומר 
+  אין לאן לברוח (. הפתרון הוא כמובן חקר המערכת רק בסדר ראשון 
+  )חלוקה לבאנצ'יפ(.
+
+2.1.2 עניין הרעש, בדגימה. )שימוש בפילטרים וכל העניין(.
+
+2.1.3 עניין השידוכים לדבר תחילה על שימוש ב DFS ו דגימה פר פריים, 
+  ואז על המעבר אל BFS ושמוש במרכזי המסה שמצאנו כנקודות מוצא 
+  לחיפוש.
+
+2.1.4 התייחסות לכך שהמסות ונהפחים אינם בהכרח כדורים, ולכן אנו 
+  מצפים לקבל עבור המסה והרדיוס המוצצעים.
+
+
+
+
+3 05% פרוש התוצאות הצגת התוצאות + חישוב שגיאות מקור השגיאות – איך 
+  הערכתם אותן – מה מקורן – איך התגברתם השוואת התוצאות לתאוריה
+
+
+
+
+
+.הכרות המערכת ומדידה ראשונית: השתמשו במיקרוסקופ לקבלת תמונה 
+איכותית של חלקיק הנמצא בתנועה בראונית בתמיסה.
+
+בצעו כיול של הגודל הנראה של החלקיק באמצעות שקף כיול. 
+כיצד תנתחו את ממוצע ריבוע ההעתק? כמה חלקיקים שונים נדרשים לקבלת 
+תוצאה איכותית? התייחסו להנחה הארגודית. 
+האם החלקיקים חופשיים לנוע בציר Z( בניצב ללוחית המיקרוסקופ(? כיצד 
+זה ישפיע על המדידה? 
+כיצד תוודאו שהמערכת איזוטרופית, כלומר שאין סחיפה לכיוון מסוים? מה 
+ניתן 2 לעשות בניתוח הנתונים כדי להתמודד עם סחף? 
+איך תראה התלות של < r> בזמן במקרה של סחיפה? קבלו את התלות של < r> 
+2 בזמן עבור מספר חלקיקים בגדלים שונים. 
+בדקו את התלות בגודל ביחס לצפוי תיאורטית. 
+2 .תלות בצמיגות: הוסיפו תמיסת חלקיקים מרוכזת לתערובת של מים 
+וגליצרול בריכוזים שונים. 
+קחו בחשבון את המים שבתמיסת החלקיקים וחשבו מחדש את הריכוז בתמיסה 2 
+הסופית. השתמשו בטבלאות לחישוב הצמיגות וקבלו תלות של < r> ושל מקדם 
+הדיפוזיה בצמיגות. 
+כיצד ניתן להשתמש במדידה זו לחישוב קבוע בולצמן? 
+3 .תלות בטמפרטורה: שנו את הטמפ' וחזרו על המדידות בערכי טמפ' 
+שונים. קחו בחשבון את שינוי הצמיגות כתוצאה משינוי הטמפ' )ניתן 
+למצוא מחשבונים וטבלאות לחישוב הבדל זה, שהוא משמעותי(. 
+4 .דיפוזיה של חזית )אופציונאלי(: השתמשו בנוזלים שונים מסיסים במים 
+)חלב, צבע מאכל, דיו( וצפו בחזית התקדמות הנוזל לתוך המים. האם יש 
+לכם אומדן לגודל החלקיקים? האם כל דיפוזיה היא תנועה בראונית?
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.001-A.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.001-B.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.001-C.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.001-D.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.002-A.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.002-B.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.002-C.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.002-D.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.003-A.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.003-B.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.003-C.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.003-D.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.005-A.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.005-B.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.005-C.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/Fig/E-r-g0.005-D.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p20g.avi00001.png.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p35g.avi00001.png.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p50g.avi00001.png.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p60g.avi00001.png.png>
+
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p75g.avi00001.png.png>
+<קובץ תמונה: C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/E-t10p98g22.6.avi.avi00001.png.png>
+
+4 שיחת סיכום -10 נקודות על אי-קיומה
+
