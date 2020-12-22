@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd 
 import matplotlib.pyplot as plt 
-from scipy.optimize import curve_fitt
+from scipy.optimize import curve_fit
 
 
 
@@ -26,7 +26,7 @@ def plot_linear_line(data, fig, case):
     return fig, coef
     
 
-def plotoneparticale( dataset ):
+def plotoneparticale( dataset, viscosity, letter ):
     windowsize = 20
 
     dataset = np.array( [dataset[i][1: 1-(len(dataset[0]) % windowsize) ] for i in range(3)] ).astype(float)
@@ -40,8 +40,9 @@ def plotoneparticale( dataset ):
     ret = []
     for axis, _arr in zip( 'xyr' , [ x, y, (x**2 + y**2)**0.5 ]):
         _arr = set_first_point_to_zero(_arr)
+        plt.clf()
         fig = plt.gcf()
-        _, coef = plot_linear_line( [t[0], np.var(_arr, axis= 0)], fig, "{0}".format(axis) )
+        _, coef = plot_linear_line( [t[0], np.var(_arr, axis= 0)], fig, "{0}-g{1:.3f}-{2}".format(axis, viscosity, letter) )
         # plt.show()
         ret.append( coef )
     return ret
@@ -70,7 +71,7 @@ def original_tracker():
 
         # just for compiling. should take real values.
         radiuses = np.array([ random( ) * 10 ** -5   for _ in range(4) ])
-        coefs = np.array([ plotoneparticale(particale) for particale in bunch ])        
+        coefs = np.array([ plotoneparticale(particale, viscosity, letter) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])        
         
         constant = 3 *np.pi 
         print(coefs[:,:,0][:,0])
@@ -136,9 +137,32 @@ def generateDataTables():
             #  +  list(map(stringilize,  np.array( [ _[1:] for  _ in particale ] ).transpose()))
             ret.append( generateGeneralTable(rows) )
     return "\n".join(ret) 
-        
+
+
+from os.path import abspath
+
+
+def insertFig ( _path  ):
+    return """
+\\begin_inset Graphics\n
+	filename {0}\n
+	scale 65\n
+\\end_inset\n""".format( abspath(_path) )
+
+
+from os import walk
+
+def generateFigsOneParticale( ):
+    _str = "\\begin_layout\n"
+    for (root,dirs,files) in walk('Fig'): 
+        for _file in files:
+            if len(_file) < 18 and "E-r-" in _file : 
+                _str += insertFig( "Fig/" + _file )
+    return _str  +"\\end_layout\n"
+
+# "generateDataTables\n" : generateDataTables,
 def generatelyx( ):
-    _generators = { "generateTable\n" : generateTable, "generateDataTables\n" : generateDataTables }
+    _generators = { "generateTable\n" : generateTable,  "generateFigsOneParticale\n" : generateFigsOneParticale }
     _str = ""
     for line in open( './doc/papertemplate.lyx', 'r', encoding="utf-8" ).readlines():
         if line in _generators: 
