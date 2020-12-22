@@ -315,6 +315,76 @@ customHeadersFooters
  – מה מקורן – איך התגברתם השוואת התוצאות לתאוריה
 \end_layout
 
+\begin_layout
+generateTable
+\end_layout
+
+\begin_layout Standard
+.הכרות המערכת ומדידה ראשונית: השתמשו במיקרוסקופ לקבלת תמונה איכותית של חלקיק
+ הנמצא בתנועה בראונית בתמיסה.
+\end_layout
+
+\begin_layout Standard
+בצעו כיול של הגודל הנראה של החלקיק באמצעות שקף כיול.
+ 
+\begin_inset Newline newline
+\end_inset
+
+כיצד תנתחו את ממוצע ריבוע ההעתק? כמה חלקיקים שונים נדרשים לקבלת תוצאה איכותית?
+ התייחסו להנחה הארגודית.
+ 
+\begin_inset Newline newline
+\end_inset
+
+האם החלקיקים חופשיים לנוע בציר Z( בניצב ללוחית המיקרוסקופ(? כיצד זה ישפיע
+ על המדידה? 
+\begin_inset Newline newline
+\end_inset
+
+כיצד תוודאו שהמערכת איזוטרופית, כלומר שאין סחיפה לכיוון מסוים? מה ניתן 2
+ לעשות בניתוח הנתונים כדי להתמודד עם סחף? 
+\begin_inset Newline newline
+\end_inset
+
+איך תראה התלות של > r< בזמן במקרה של סחיפה? קבלו את התלות של > r< 2 בזמן
+ עבור מספר חלקיקים בגדלים שונים.
+ 
+\begin_inset Newline newline
+\end_inset
+
+בדקו את התלות בגודל ביחס לצפוי תיאורטית.
+ 
+\begin_inset Newline newline
+\end_inset
+
+2 .תלות בצמיגות: הוסיפו תמיסת חלקיקים מרוכזת לתערובת של מים וגליצרול בריכוזים
+ שונים.
+ 
+\begin_inset Newline newline
+\end_inset
+
+קחו בחשבון את המים שבתמיסת החלקיקים וחשבו מחדש את הריכוז בתמיסה 2 הסופית.
+ השתמשו בטבלאות לחישוב הצמיגות וקבלו תלות של > r< ושל מקדם הדיפוזיה בצמיגות.
+ 
+\begin_inset Newline newline
+\end_inset
+
+כיצד ניתן להשתמש במדידה זו לחישוב קבוע בולצמן? 
+\begin_inset Newline newline
+\end_inset
+
+3 .תלות בטמפרטורה: שנו את הטמפ' וחזרו על המדידות בערכי טמפ' שונים.
+ קחו בחשבון את שינוי הצמיגות כתוצאה משינוי הטמפ' )ניתן למצוא מחשבונים וטבלאות
+ לחישוב הבדל זה, שהוא משמעותי(.
+ 
+\begin_inset Newline newline
+\end_inset
+
+4 .דיפוזיה של חזית )אופציונאלי(: השתמשו בנוזלים שונים מסיסים במים )חלב, צבע
+ מאכל, דיו( וצפו בחזית התקדמות הנוזל לתוך המים.
+ האם יש לכם אומדן לגודל החלקיקים? האם כל דיפוזיה היא תנועה בראונית?
+\end_layout
+
 \begin_layout Standard
 \begin_inset Graphics
 	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/9-tstraigh2t10ppure.avi00001.png.png
@@ -424,6 +494,8 @@ customHeadersFooters
 \numeric off
  נקודות על אי-קיומה
 \end_layout
+
+generateDataTables
 
 \end_body
 \end_document
