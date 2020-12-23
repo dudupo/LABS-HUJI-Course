@@ -8,8 +8,8 @@ import pandas
 from scipy.optimize import curve_fit
 
 def extract_coef( time, distance ):
-    def f(x, a, b, c, d):
-        return a*np.cos(b*x +c) + d
+    def f(x, a, b,c, d ):
+        return a*np.cos(b*x+c)**2 + d  
     popt, pcov = curve_fit(f, time, distance)
     _range = np.linspace( np.min(time) , np.max(time), 100 )
     return popt, (_range, f(_range, *popt)) 
@@ -24,7 +24,7 @@ CONSTAT_POL_ANGLE = 223
 
 _lightexp = "./csv/STRIKE/test-1.xlsx" 
 _darkexp = "./csv/STRIKE-DARK/test-1.xlsx"
-_lightoffset = "./csv/OFFSET/test-4.xlsx"
+_lightoffset = "./csv/OFFSET/test-3.xlsx"
 
 
 ANGELS = [ 218, 200, 180, 160, 140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10 , 0, 350]
@@ -42,9 +42,17 @@ def covert_data_frame( df ):
     return df[0][5:].values.astype(float) 
 
 
+
+def plot_phase_diff(angels,  amp):
+    x, y = np.deg2rad((np.array(angels) - CONSTAT_POL_ANGLE) % 360), np.array(amp)
+    coeff, cosfunc = extract_coef(x, y)
+    plt.plot(x,y)
+    plt.plot(cosfunc[0], cosfunc[1])
+    plt.show()
+
 def main():
     print( len(ANGELS2) == len(AMP2))
-    return 
+    # return 
     light_strike = covert_data_frame(pandas.read_excel(_lightexp)) 
     dark_strike = covert_data_frame(pandas.read_excel(_darkexp))
     lightoffset = covert_data_frame(pandas.read_excel(_lightoffset))
@@ -56,11 +64,10 @@ def main():
     print( np.linalg.norm( dark_strike - (light_strike- np.average( lightoffset ) ) ))
     # plt.savefig( "" )
 
-    x, y = np.deg2rad((np.array(ANGELS) - CONSTAT_POL_ANGLE) % 360), np.array(AMP)
-    coeff, cosfunc = extract_coef(x, y)
-    plt.plot(x,y)
-    plt.plot(cosfunc[0], cosfunc[1])
-    plt.show()
+    print(np.average( lightoffset ))
+    plot_phase_diff(ANGELS, np.array(AMP) - np.mean( lightoffset ))
+    plot_phase_diff(ANGELS2, np.array(AMP2) - np.mean( lightoffset ))
+    
 
 if __name__ == "__main__" :
     main()
