@@ -549,7 +549,7 @@ def plot_average( distance_time, fig, case):
     if len(aver) > 0 :
         coef, poly = extract_coef( [ aver, list(range(len(aver)))] )
         plt.plot(poly)
-        plt.legend( [r'messuresd', r'liner fitting $D$=' + "{0:.3f}".format(coef[0])]) #] )
+        plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0])]) #] )
     fig.savefig("./fig/E-{0}.png".format(case))
     return fig, 0
     
@@ -678,13 +678,12 @@ def test_read():
             fig  = plt.gcf()
             # fig, _  = plot_aside_fix( naive_distance_over_frames(particales_frames))
             fig, _ = plot_average(distance_time,fig,  testcases[0])
-
-           
             # plt.show()
 
 
 if __name__ == "__main__":
-    test_read()
+    pass
+    #test_read()
 
 
 
