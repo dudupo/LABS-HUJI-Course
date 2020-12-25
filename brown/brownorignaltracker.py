@@ -5,11 +5,13 @@ from scipy.optimize import curve_fit
 
 
 
-
+K = 1.38*10**(-23)
+T = 295
+A = 2*T*K/(3*np.pi)
 
 def extract_coef( time, distance ):
-    def f(x, a, b):
-        return a*x + b
+    def f(t, a, b):
+        return a*t + b
     popt, pcov = curve_fit(f, time, distance)
     return popt, f(time, *popt) 
 
@@ -30,7 +32,7 @@ def plotoneparticale( dataset, viscosity, letter ):
     windowsize = 20
 
     dataset = np.array( [dataset[i][1: 1-(len(dataset[0]) % windowsize) ] for i in range(3)] ).astype(float)
-    dataset = dataset.reshape( 3, len(dataset[0]) //windowsize, windowsize ) 
+    dataset = dataset.reshape( 3, len(dataset[0]) //windowsize, windowsize )
     t, x, y = dataset
     
     def set_first_point_to_zero(_arr):
@@ -48,7 +50,12 @@ def plotoneparticale( dataset, viscosity, letter ):
     return ret
 
 from thermo.chemical import Mixture
-from random import random 
+from random import random
+import math
+
+def truncate(number, digits) -> float:
+    stepper = 10.0 ** digits
+    return math.trunc(stepper * number) / stepper
 
 roomtempKelvin  = 294.15
 earthpressure =  101325
@@ -61,9 +68,70 @@ precents = [ 0, 0.1, 0.2, 0.35, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98 ]
 viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ],T=roomtempKelvin,P=earthpressure).mu\
         for p in precents ]
 
+
+def get_radius():
+    Kbs = []
+    coeff_x = []
+    coeff_y = []
+    for _f in open( "./csv/files" , "r").readlines()[1:]:
+        i = 0  # TODO update
+        cur_v = viscosities[i]
+        lets = [ 'A', 'B', 'C', 'D']
+        data = [ pd.read_csv('./csv/BrownCSV/{0}'.format(_f.format(letter)[:-1] ))  for letter in lets ]
+        for j, mass in enumerate(data):
+            try:
+                x = mass['x']
+                y = mass['y']
+            except:
+                print("particle radius of ", _f, lets[j], ": bad format" )
+                continue
+            l = len(x) % 20
+            if l != 0:
+                x = x[:-l]
+                y = y[:-l]
+            x = x.to_numpy().reshape(-1, 20)
+            y = y.to_numpy().reshape(-1, 20)
+            x = x*((10**(-4))/2) #TODO check scale
+            y = y*((10**(-4))/2)
+
+            f = lambda z: z - z[0]
+            x = np.apply_along_axis(f, 1, x)
+            y = np.apply_along_axis(f, 1, y)
+            x = np.var(x, axis=0)
+            y = np.var(y, axis=0)
+            r_mass = np.power(x,2) + np.power(y,2)
+            # r_mass = np.apply_along_axis(f, 1, r_mass)
+            # r_mass = np.var(r_mass, axis=0)
+            # plt.plot(r_mass)
+            cur = A*1.9/(cur_v*r_mass[-1])
+            if cur > 1:
+                print("particle radius of ", _f, lets[j], ": bad format")
+                continue
+            coeff_x.append(cur)
+            coeff_y.append(A/(cur_v*cur))
+            print("particle radius of ", _f, lets[j], ": ", cur)
+            cur = truncate(cur, 5)
+            print(cur)
+            Kbs.append(3*cur_v*np.pi*cur*r_mass[-1]/(2*1.9*294.15))
+
+        i+=1
+
+    from scipy.stats import describe
+    print(describe(Kbs))
+    plt.plot(coeff_x, coeff_y, 'o', color='black')
+    plt.show()
+    print(coeff_x)
+    print(coeff_y)
+
+
+
+
+
+
+
 def original_tracker():
     
-    print(viscosities) 
+    print(viscosities)
 
     for _filename, viscosity in zip(open( "./csv/files" , "r").readlines()[1:], viscosities):
         bunch = [ pd.read_csv('./csv/BrownCSV/{0}'.format(_filename.format(letter)[:-1] ),\
@@ -71,10 +139,11 @@ def original_tracker():
 
         # just for compiling. should take real values.
         radiuses = np.array([ random( ) * 10 ** -5   for _ in range(4) ])
-        coefs = np.array([ plotoneparticale(particale, viscosity, letter) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])        
+        coefs = np.array([ plotoneparticale(particale, viscosity, letter) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])
+        print(coefs.shape)
         
         constant = 3 *np.pi 
-        print(coefs[:,:,0][:,0])
+        # print(coefs[:,:,0][:,0])
         coefs ,poly = extract_coef( 1/(constant * radiuses) ,  coefs[:,:,0][:,0])        
         bolzmanfactor.append( coefs[0] )
 
@@ -180,5 +249,6 @@ def generatelyx( ):
 
 if __name__ == "__main__" :
     # original_tracker()
-    generatelyx()
+    get_radius()
+    # generatelyx()
 # ()
