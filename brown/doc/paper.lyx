@@ -60,9 +60,9 @@ customHeadersFooters
 \shortcut idx
 \color #008000
 \end_index
-\leftmargin 1cm
+\leftmargin 2cm
 \topmargin 1.8cm
-\rightmargin 1cm
+\rightmargin 2cm
 \bottommargin 1.5cm
 \headheight 0cm
 \headsep 1cm
@@ -161,8 +161,8 @@ customHeadersFooters
 (
 \series default
 .
- מטרתנו בניסו היא תחילה לאשש תאוריה זאת, כלומר לבדוק האם ההנחת הרגודיות
- היא סבירה בתנאים של טמפ' החדר וריכוזים שונים של תווחים אותם אנו מערכים
+ מטרתנו בניסו הייתה תחילה לאשש תאוריה זאת, כלומר לבדוק האם ההנחת הרגודיות
+ היא סבירה בתנאים של טמפ' החדר וריכוזים שונים של טווחים אותם אנו מערכים
  כ
 \begin_inset Quotes erd
 \end_inset
@@ -172,8 +172,24 @@ customHeadersFooters
 \end_inset
 
 .
- לבסוף נשערך את רדיוס החלקיק ) פוליטנן ( עבור חליקיקים מסויימים אחרייהם
- עקבנו, ואת קבוע הצמיגות )של כל תמיסה(.
+ לאחר הערכה הגסה, לתת תוקף נוסף בהמצאות חישוב קבוע בולצמן עד כדי שגיאה שמקורה
+ ביכולת המדידה.
+\end_layout
+
+\begin_layout Standard
+לשמחתנו אף על פי שהתרשלנו במדידת הטמפ' ונוכחות של זרם, הגענו להערכה טובה
+ של קבוע זה עד 
+\series bold
+להשלים ....
+ ספרות אחרי הנקודה
+\series default
+.
+ 
+\series bold
+בטווח ....
+
+\series default
+ .
 \end_layout
 
 \begin_layout Section
@@ -189,57 +205,726 @@ customHeadersFooters
 \end_layout
 
 \begin_layout Standard
-כדי לבחון את התנועה הראונית חילקנו את הניסוי לפי ריכוזים שונים.
+כדי לבחון את התנועה הבראונית חילקנו את הניסוי לפי ריכוזים שונים.
  כל ריכוז הכיל כ 
 \begin_inset Formula $10\%$
 \end_inset
 
- חלקיקים, וכ 
+ ריכוז של חלקיקים -להלן טבלה-, וכ 
 \begin_inset Formula $90\%$
 \end_inset
 
- נוזל, כאשר בכל שלב הנוזל היה אחד מ 
-\begin_inset Formula $\left[10\%,\,20\%\,,35\%\,,50\%,\,...\right]$
+ מתערובת של מים וגליצרול.
+ יחד בנפח כולל של כ 
+\begin_inset Formula $40_{\left[\mu L\right]}$
 \end_inset
 
- ) 
-\series bold
-להוסיף לשנות(
-\series default
- .
- 
-\series bold
-להוסיף טבלה של נפחים וריכוזים.
- + שגיאת מדידיה וכדומה.
- 
-\series default
-כל תרכיז שוכן בין שתי פלטות זכוכית, במטרה לצמצם את דרגת החופש של התנועה
+.
+ להלן טבלה המתארת את את ריכוז הגליצרול בתערובת בכל אחד הניסויים, ולכל ריכוז
+ שכזה את קבוע הצמיגות המאפיין אותה.
+ כל ריכוז שוכן בין שתי פלטות זכוכית, במטרה לצמצם את דרגת החופש של התנועה
  בציר ה 
 \begin_inset Formula $\hat{z}$
 \end_inset
 
 .
- נפח כל ריכוז היה כ 
-\begin_inset Formula $40\left[mL\right]$
+ ובכך להבטיח שאנו מסתכלים על מערכת שהיא בקרוב דו מימדית.
+\begin_inset Newline newline
 \end_inset
 
-.
- דגמנו סרטונים בהמצאות במקרוסקופ מסוג 
-\begin_inset Formula $X$
-\end_inset
 
-, ולו רזלוציה 
-\begin_inset Formula $Y$
-\end_inset
-
-.
- להלן תרשים של הניסוי :
 \end_layout
 
 \begin_layout Standard
+עוד קצת פרטים טכנים על הכנת הריכוזים.
+ כדי להבטיח יחס של 
+\begin_inset Formula $90$
+\end_inset
+
+ ל 
+\begin_inset Formula $10$
+\end_inset
+
+ 
+\begin_inset Formula $\%$
+\end_inset
+
+, בתמיסה הכוללת דגמנו כ
+\begin_inset Formula $160_{\left[\mu L\right]}$
+\end_inset
+
+ מריכוז תערובת הגליצרול וכ 
+\begin_inset Formula $40_{\left[\mu L\right]}$
+\end_inset
+
+ מתערובת החלקיקים, שמנו לב כי עבור ריכוזים גבוהים של גליצרול, הפטיפטה מזייפת,
+ בערכה גסה כ 
+\begin_inset Formula $...$
+\end_inset
+
+, כלומר היא אינה יונקת כ 
+\begin_inset Formula $160_{\left[\mu L\right]}$
+\end_inset
+
+ נפח.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+את תמונה המתקבלת מהמיקרוסקופ ניתחנו בהמצאות תוכנת מעקב, עבור חלקיקים שנבחרו
+ באופן סלקטיבי כך שלמראית העין ניראים כדורים.
+ כארבעה חלקיקים פר ריכוז.
+ במערכת המצייתת באופן מושלם להנחת הארגודיות, מקטע הנתונים 
+\begin_inset Formula $\left[t_{1}\rightarrow t_{2}\right]$
+\end_inset
+
+ הוא מדידה בפני עצמו.
+ זאת מאחר ומערכת ארגודית היא חסרת זכרון.
+ הסעיף הבא מתואר כיצד השתמשנו בעובדה הזאת, כדי להתגבר על משברים שנקלנו בם
+ בעת ההסקה מהמדידה.
+ לצורך המשך הדיון נגיד כי חלון 
+\begin_inset Formula $\omega$
+\end_inset
+
+ הוא אינטרוול זמן, ומיצוע על החלונות פירושה 
+\begin_inset Formula 
+\[
+\bar{X}\left(t\right)=\frac{1}{\#windows}\sum_{\omega}X\left[\omega+t\right]
+\]
+
+\end_inset
+
+ כאשר 
+\begin_inset Formula $X$
+\end_inset
+
+ הוא גודל כל שהוא )כמובן שבהקשר המרחק 
+\begin_inset Formula $X=\bar{x}^{2}$
+\end_inset
+
+ (.
+ שוב, בהתאמה מושלמת לתאוריה, המדידה על פני החלונות שקולה למדידה על פני חליקיקים
+ שונים ברדיוס זהה.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נציין כי בתחילת הניסוי ההיינו חשדנים לגבי טיב האיכות של התוצאות המתקבלות
+ מבחירה סלקטיבית של חלקיקים )כדורים(.
+ ולמעשה הדרישה הזאת אינה הכרחית אם מניחים כי התפלגות צורת החלקיקים היא ללא
+ עדיפות מבחינה מרחבית, כלומר שבתוחלת הכדורים שואפים להיות כדורים.
+ המחשבה הזאת, התניעה בנו מוטיבציה לסכום על פני כל החלקיקים במערכת, ומשם
+ קבוע בולצמן יהיה השיפוע של הישר התקבל מחישוב התוחלת המותנת 
+\begin_inset Formula 
+\[
+k_{B}t=c\cdot\mathbb{E}\left[\mathbb{E}\left[r^{2}|a\right]\right]\left(t\right)
+\]
+
+\end_inset
+
+.
+ תוצאה שכזאת הייתה יכולה להיות מאוד מרגשת.
+ לבסוף לא הצלחנו לממש את הרעיון אך יצאו לנו כמה תמונות יפות ,ויותר חשוב,
+ ההתעסקות בכך חיזקה את הבנה הכללית שלנו לגבי קנה המידה של המערכת, עד כמה
+ היא רועשת, מה זה אומר ארגודיות בעצם ולמה כשאומרים 
+\begin_inset Quotes eld
+\end_inset
+
+סביר להניח
+\begin_inset Quotes erd
+\end_inset
+
+ אז באמת סביר להניח.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Graphics
 	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/20201125_095407.jpg
 	scale 20
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+המיקרוסקופ בו השתמשנו כדי לקחת את הדגימות, בהגדלה ניתן לראות את הצלחית ששימשה
+ אותנו, הפס הכחול מדגיש את הזכוכית העליונה שנועדה לשטח את הרכיוז.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+סחף.
+\end_layout
+
+\begin_layout Standard
+נזכיר שוב כי פיתוח הקשר של התנועה הבראונית מניח כי מיצוע על פני הכוח אותו
+ ירגיש חליקיק במרחב מתאפס 
+\begin_inset Formula $\left\langle xF\left(x,t\right)\right\rangle $
+\end_inset
+
+.
+ אך ברור כי גורמים שונים יכולים להטוות כיוון לכוח זה ומכאן כיוון מרכזי לזרימה
+ על הצלוחית.
+ בהינתן כיוון מועדף נצפה כי 
+\begin_inset Formula $\left\langle x\left(t\right)\right\rangle \neq0$
+\end_inset
+
+ )תוחלת מיקום החלקיק(.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+הגישה הראשונה בה נקטו כדי להתמודד עם הפער בין ההנחות למצב המערכת היתה צימצום
+ למינמום השפעות החיצוניות על המערכת.
+ השתמשנו בפלס כדי לוודא שמשטח המיקרסקופ ישר ובכך נמנע מכוח הגרויטציה של
+ כדו
+\begin_inset Quotes erd
+\end_inset
+
+א להאיץ את החליקיקים, דאגנו לחכות לחכות זמן סביר כדי שתנאי ההתחלה שנירכשו
+ ברגע הצבת הצלוחית ידעכו.
+ נוסף על כל זה הקפדנו על סטראיליות מאחר וראינו כי הצטברות אבק עקב הזנחה
+ של צלוחית עשויה גם לתת תוצאות מוזרות.
+\end_layout
+
+\begin_layout Standard
+לאחר שיצמצמנו את עוצמת השפעת ההפרעות, נקטנו בגשיה שניה - כעת היה ניתן להניח
+ כי ההפרעות בטווח קצר )טווח שהתברר בדיעבד בסדר גודל של שניות, כלומר אכן
+ מתאים לזמן האופייני בניסוי( הן אינן הגורם העיקרי בהכתבת אופי התנועה ומעתה
+ היה ניתן לחשוב עלייהם כאל 'משתנה מקרי', ועל מקטע זמן כאל דגימה, חילקנו
+ הנתונים אל חלונות.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+זה עדיין, לא הספיק.
+ להל
+\begin_inset Quotes erd
+\end_inset
+
+נ ניתוח על פני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $\sim60$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+פריימים )
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+6
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שניות לחלון ( לחלקיק הנמצא בתווך עם מקדם צמיגות
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $10^{-4}\left[P\cdot s\right]$
+\end_inset
+
+
+\numeric off
+.
+ של מיצוע על פני החלונות.
+ וההתאמה הלניארית המתאימה לו.
+ מאחר והסקלה קטנה קל להתבלבל וחשוב שקיבלנו גרף לניארי, אבל למעשה בזמן של
+ 
+\begin_inset Formula $6$
+\end_inset
+
+ שניות קיבלנו שיפוע של 
+\begin_inset Formula $\sim3.5$
+\end_inset
+
+, כלומר בערך הכפלה לאחר 
+\begin_inset Formula $4$
+\end_inset
+
+ שניות.
+ הגדלים הללו אינם דומים כלל לזמן האופייני במערכת.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+מצד שני הקורא המתעמק ישים לב שהפונקציה המתקבלת היא כמעט אינה רועשת, כלומר
+ זה ניראה שבחלון קטן, המומוצע הארמטי של 
+\begin_inset Formula $x^{2}\left(t\right)$
+\end_inset
+
+ נישלט לפי כלל מסויים במערכת.
+ וזה הביא אותנו לגישה השלישית.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/first/E-r-g0.001-A1.png
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbb{E}\left[r^{2}\right]$
+\end_inset
+
+-ניתוח על פני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+6
+\numeric off
+ שניות לחלון.
+ לחלקיק הנמצא בתווך עם מקדם צמיגות
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $10^{-4}\left[P\cdot s\right]$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+את הגישה השלישית, אנחנו חייבים למדריכה )שני(, למעשה.
+ פיתוח משוואה הדיפוזיה חוזה כי המקדם אותו אנו מחפשים 
+\begin_inset Formula $\frac{2k_{B}T}{\alpha}$
+\end_inset
+
+ הוא שונות התפלגות המתקבלת ממשוואת הדיפוזיה.
+ תחת ההפרעות, נקבל כי הממצוע של ההתפלגות כבר אינו מתאפס.
+ ומכאן שגם 
+\begin_inset Formula 
+\[
+\mathbb{E}\left[r\right]\neq0\Rightarrow\mathbb{V}\left[x\right]\mapsto\mathbb{E}\left[r^{2}\right]-\mathbb{E}^{2}\left[r\right]
+\]
+
+\end_inset
+
+ ההאתמה הבאה, הקבלה עבור החלקיק שלעיל.
+ באותו פרק זמן.
+ וקיבלנו כי המקדם נחתך ביותר מפי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\numeric off
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/sec/E-r-g0.001-A1.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbb{V}\left[r^{2}\right]$
+\end_inset
+
+-ניתוח על פני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+20
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+פריימים )
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שניות לחלון ( לאותו חלקיק בדיוק.
+ מקדם צמיגות 
+\numeric on
+
+\begin_inset Formula $10^{-4}\left[P\cdot s\right]$
+\end_inset
+
+
+\numeric off
+
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+הערה חשובה,
+\series default
+ אומנם זה ניראה שהאתאמה הלניארית היא פחות טובה.
+ אבל יש לשים לב שהסקלה של ציר ה 
+\begin_inset Formula $\hat{y}$
+\end_inset
+
+ בתרשים הקודם היא כפולה.
+ ולכן גם המרחקים מהציר הם משמעותים יותר.
+ והשיפוע תלול בהרבה.
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \end_inset
 
@@ -315,9 +1000,63 @@ customHeadersFooters
  – מה מקורן – איך התגברתם השוואת התוצאות לתאוריה
 \end_layout
 
-\begin_layout generateTable
+\begin_layout Standard
+
+\begin_layout Standard
+
+\begin_inset ERT
+
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+begin{center}
 
 \end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+begin{tabular}{  |c|c|c|c|c|c|c|c|c|c|c|c| }
+
+\end_layout
+
+
+\begin_layout Plain Layout
+
+0.980 &0.950 &0.900 &0.800 &0.700 &0.600 &0.500 &0.350 &0.200 &0.100 &0.000 &precents 
+\backslash 
+\backslash 
+
+\end_layout  
+\begin_layout Plain Layout
+
+0.482 &0.214 &0.076 &0.019 &0.008 &0.004 &0.003 &0.002 &0.001 &0.001 &0.001 &viscositie[Pa*s] 
+\backslash 
+\backslash 
+
+\end_layout  
+
+\begin_layout Plain Layout
+
+\backslash
+end{tabular}
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+end{center}
+
+\end_layout
+
+\end_inset
+
+\end_layout
+
+        \end_layout
 
 \begin_layout Standard
 .הכרות המערכת ומדידה ראשונית: השתמשו במיקרוסקופ לקבלת תמונה איכותית של חלקיק
@@ -384,173 +1123,6 @@ customHeadersFooters
  מאכל, דיו( וצפו בחזית התקדמות הנוזל לתוך המים.
  האם יש לכם אומדן לגודל החלקיקים? האם כל דיפוזיה היא תנועה בראונית?
 \end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.001-A.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.001-B.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.001-C.png
-
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.001-D.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.002-A.png
-
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.002-B.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.002-C.png
-
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.002-D.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.003-A.png
-
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.003-B.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.003-C.png
-
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.003-D.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.005-A.png
-
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.005-B.png
-
-	scale 65
-
-\end_inset
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.005-C.png
-
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout
-
-\begin_inset Graphics
-
-	filename C:\Users\davidponar\workspace\LABS-HUJI-Course\brown\Fig\E-r-g0.005-D.png
-
-	scale 65
-
-\end_inset
-\end_layout
-
 
 \begin_layout Section
 שיחת סיכום 

@@ -16,38 +16,56 @@ def extract_coef( time, distance ):
     return popt, f(time, *popt) 
 
 
-def plot_linear_line(data, fig, case):
+def plot_linear_line_E(data, fig, case):
     plt.scatter(*data)
     plt.title( r' $ E [ r^2 ] $ as function of time {0}'.format( case)  )
     plt.xlabel(r'time [ frames ]')
-    plt.ylabel(r'$r$ [px]')
+    plt.ylabel(r'$E [ r^2 ] $ [px]')
     coef, poly = extract_coef( *data )
     plt.plot(data[0], poly)
     plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0])]) #] )
-    fig.savefig("./fig/E-{0}.png".format(case))
+    fig.savefig("./fig/first/E-{0}.png".format(case))
     return fig, coef
-    
 
-def plotoneparticale( dataset, viscosity, letter ):
-    windowsize = 20
+def plot_linear_line_V(data, fig, case):
+    plt.scatter(*data)
+    plt.title( r' $ V [ r ] $ as function of time {0}'.format( case)  )
+    plt.xlabel(r'time [ frames ]')
+    plt.ylabel(r'$V [ r ] $ [px]')
+    coef, poly = extract_coef( *data )
+    plt.plot(data[0], poly)
+    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0])]) #] )
+    fig.savefig("./fig/sec/E-{0}.png".format(case))
+    return fig, coef
 
-    dataset = np.array( [dataset[i][1: 1-(len(dataset[0]) % windowsize) ] for i in range(3)] ).astype(float)
-    dataset = dataset.reshape( 3, len(dataset[0]) //windowsize, windowsize )
-    t, x, y = dataset
-    
-    def set_first_point_to_zero(_arr):
-        _arr = _arr.transpose()
-        return ( _arr -  _arr[0]).transpose() 
 
-    ret = []
-    for axis, _arr in zip( 'xyr' , [ x, y, (x**2 + y**2)**0.5 ]):
-        _arr = set_first_point_to_zero(_arr)
-        plt.clf()
-        fig = plt.gcf()
-        _, coef = plot_linear_line( [t[0], np.var(_arr, axis= 0)], fig, "{0}-g{1:.3f}-{2}".format(axis, viscosity, letter) )
-        # plt.show()
-        ret.append( coef )
-    return ret
+def createplotoneparticale( func, _plotfunc ):
+
+    def genericplotoneparticale( dataset, viscosity, letter ):
+        windowsize = 60
+
+        dataset = np.array( [dataset[i][1: 1-(len(dataset[0]) % windowsize) ] for i in range(3)] ).astype(float)
+        dataset = dataset.reshape( 3, len(dataset[0]) //windowsize, windowsize )
+        t, x, y = dataset
+        
+        def set_first_point_to_zero(_arr):
+            _arr = _arr.transpose()
+            return ( _arr -  _arr[0]).transpose() 
+
+        ret = []
+        for axis, _arr in zip( 'xyr' , [ x, y, (x**2 + y**2)**0.5 ]):
+            _arr = set_first_point_to_zero(_arr)
+            plt.clf()
+            fig = plt.gcf()
+            _, coef = _plotfunc( [t[0], func(_arr)], fig, "{0}-g{1:.3f}-{2}".format(axis, viscosity, letter) )
+            # plt.show()
+            ret.append( coef )
+        return ret
+    return genericplotoneparticale
+
+plotoneparticale = createplotoneparticale( lambda _arr : np.var(_arr, axis= 0), plot_linear_line_V )
+firsttry_plotoneparticale = createplotoneparticale( lambda _arr : np.mean(_arr**2, axis= 0), plot_linear_line_E )
+
 
 from thermo.chemical import Mixture
 from random import random
@@ -57,7 +75,7 @@ def truncate(number, digits) -> float:
     stepper = 10.0 ** digits
     return math.trunc(stepper * number) / stepper
 
-roomtempKelvin  = 294.15
+roomtempKelvin  = 298.15
 earthpressure =  101325
 bolzmanfactor = [ ]
 
@@ -65,7 +83,7 @@ bolzmanfactor = [ ]
 precents = [ 0, 0.1, 0.2, 0.35, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98 ]
 
 # just for compiling. should take real values.
-viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ],T=roomtempKelvin,P=earthpressure).mu\
+viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ]).mu\
         for p in precents ]
 
 
@@ -132,20 +150,22 @@ def get_radius():
 def original_tracker():
     
     print(viscosities)
-
+    _id = 0
     for _filename, viscosity in zip(open( "./csv/files" , "r").readlines()[1:], viscosities):
         bunch = [ pd.read_csv('./csv/BrownCSV/{0}'.format(_filename.format(letter)[:-1] ),\
             sep=',',header=None)  for letter in [ 'A', 'B', 'C', 'D'] ]
 
         # just for compiling. should take real values.
         radiuses = np.array([ random( ) * 10 ** -5   for _ in range(4) ])
-        coefs = np.array([ plotoneparticale(particale, viscosity, letter) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])
+        coefs = np.array([ firsttry_plotoneparticale(particale, viscosity, letter + "{0}".format(_id)) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])
+        coefs = np.array([ plotoneparticale(particale, viscosity, letter + "{0}".format(_id)) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])
         print(coefs.shape)
         
         constant = 3 *np.pi 
         # print(coefs[:,:,0][:,0])
         coefs ,poly = extract_coef( 1/(constant * radiuses) ,  coefs[:,:,0][:,0])        
         bolzmanfactor.append( coefs[0] )
+        _id += 1
 
     print( bolzmanfactor )
     print(np.mean( np.array( bolzmanfactor ) ) / roomtempKelvin)
@@ -192,7 +212,7 @@ def stringilize(_arr):
     return ["{0:.3f}".format(_) for _ in _arr]
 
 def generateTable():
-    return generateGeneralTable([ ["precents"] + stringilize(precents), ["viscosities"] + stringilize(viscosities)]) 
+    return generateGeneralTable([ ["precents"] + stringilize(precents), ["viscositie[Pa*s]"] + stringilize(viscosities)]) 
 
 def generateDataTables():
     ret = [ ]
@@ -248,7 +268,7 @@ def generatelyx( ):
 
 
 if __name__ == "__main__" :
-    # original_tracker()
-    get_radius()
-    # generatelyx()
+    original_tracker()
+    # get_radius()
+    generatelyx()
 # ()
