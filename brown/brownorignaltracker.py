@@ -9,45 +9,84 @@ K = 1.38*10**(-23)
 T = 295
 A = 2*T*K/(3*np.pi)
 
-def extract_coef( time, distance ):
-    def f(t, a, b):
-        return a*t + b
+def extract_coef( time, distance , f = lambda t,a,b : a*t    ):
     popt, pcov = curve_fit(f, time, distance)
-    return popt, f(time, *popt) 
+    return popt, f(time, *popt), pcov
+
 
 
 def plot_linear_line_E(data, fig, case):
-    plt.scatter(*data)
+    scale, _ = convert_meters_to_pix(1, 0)
+    scale = scale  ** 2
     plt.title( r' $ E [ r^2 ] $ as function of time {0}'.format( case)  )
-    plt.xlabel(r'time [ frames ]')
+    plt.xlabel(r'time [ s ]')
     plt.ylabel(r'$E [ r^2 ] $ [px]')
-    coef, poly = extract_coef( *data )
-    plt.plot(data[0], poly)
-    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0])]) #] )
-    fig.savefig("./fig/first/E-{0}.png".format(case))
+    coef, poly, pcov = extract_coef( *data )
+
+    _error = 1
+    plt.plot(data[0], poly * scale, c = "teal", alpha=0.6)
+    plt.errorbar(data[0], data[1] * scale, yerr = _error, fmt='o', c= "black" ,alpha=0.2)
+    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0] * scale)]) #] )
+    fig.savefig("./fig/first/E-{0}.svg".format(case))
     return fig, coef
 
-def plot_linear_line_V(data, fig, case):
-    plt.scatter(*data)
+def plot_linear_line_V(data, fig, case , f = lambda t,a,b : a*t):
     plt.title( r' $ V [ r ] $ as function of time {0}'.format( case)  )
-    plt.xlabel(r'time [ frames ]')
+    plt.xlabel(r'time [ s ]')
     plt.ylabel(r'$V [ r ] $ [px]')
-    coef, poly = extract_coef( *data )
-    plt.plot(data[0], poly)
-    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0])]) #] )
-    fig.savefig("./fig/sec/E-{0}.png".format(case))
+    coef, poly, pcov = extract_coef( *data , f= f )
+    scale, _ = convert_meters_to_pix(1, 0)
+    scale = scale ** 2 
+    _error = 1
+    plt.plot(data[0], poly * scale , c = "teal", alpha=0.6)
+    plt.errorbar(data[0],data[1] * scale, yerr = _error ,fmt='o', c= "black" ,alpha=0.2)
+    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0] * scale )]  ) #] )
+    fig.savefig("./fig/sec/E-{0}.svg".format(case))
     return fig, coef
+
+def plot_linear_line_bolzman(data, fig, case ,relevent_radiuses, f = lambda t,a,b : a*t):
+    plt.title( r' $ m = \frac{k_{B}T}{ 3 \pi \mu a } $ as function of $ \mu a $' )
+    plt.xlabel(r'$ (\mu a )^{-1} $')
+    plt.ylabel(r'$  \frac{k_{B}T}{ 3 \pi \mu a } $')
+    scale, _ = convert_meters_to_pix(1, 0)
+
+    yerrors = ((1 /(relevent_radiuses * scale) ) + 0.1536) * data[1] 
+    xerrors = ((1 /(relevent_radiuses * scale)) + 0.1) * data[0]
+    
+    coef, poly, pcov = extract_coef( *data , f= f )
+    plt.errorbar(data[0],data[1], yerr=yerrors, xerr=xerrors , fmt='o'  , c = "black" ,alpha=0.2)
+    plt.plot(data[0], poly  , c = "teal", alpha=0.6)
+    # _error = -0.1 * 10**-4 * scale
+    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0]  )]  ) #] )
+    fig.savefig("./fig/sec/E-{0}.svg".format(case))
+    return fig, coef
+
+def crop_windows( _arr, windowsize):
+    return  _arr.reshape(-1, windowsize)
+
+def convert_to_array( dataset ):
+    return np.array( [dataset[i][1:] for i in range(3)] ).astype(float)
+
+def convert_pix_to_meters(x,y):
+    x = x*((10**(-5))/20) #TODO check scale
+    y = y*((10**(-5))/20)
+    return x,y 
+
+def convert_meters_to_pix(x,y):
+    x = x * 20 * 10**5 
+    y =y* 20 * 10**5
+    return x,y 
+
 
 
 def createplotoneparticale( func, _plotfunc ):
 
     def genericplotoneparticale( dataset, viscosity, letter ):
-        windowsize = 60
+        windowsize = 40
 
-        dataset = np.array( [dataset[i][1: 1-(len(dataset[0]) % windowsize) ] for i in range(3)] ).astype(float)
-        dataset = dataset.reshape( 3, len(dataset[0]) //windowsize, windowsize )
-        t, x, y = dataset
-        
+        dataset = convert_to_array(  dataset)[:,: 1 - (len(dataset[0]) % windowsize) ]
+        t, x, y = map(lambda _arr : crop_windows(  _arr, windowsize), dataset ) 
+        x, y = convert_pix_to_meters(x,y)
         def set_first_point_to_zero(_arr):
             _arr = _arr.transpose()
             return ( _arr -  _arr[0]).transpose() 
@@ -80,17 +119,19 @@ earthpressure =  101325
 bolzmanfactor = [ ]
 
 
-precents = [ 0, 0.1, 0.2, 0.35, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98 ]
+precents = [ 0, 0.1, 0.2, 0.35, 0.5, 0.6] # 0.7, 0.8, 0.9, 0.95, 0.98 ]
 
 # just for compiling. should take real values.
-viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ]).mu\
-        for p in precents ]
-
+viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ]).nu for p in precents ]
 
 def get_radius():
     Kbs = []
     coeff_x = []
     coeff_y = []
+
+    # dict, experiment -> radius 
+    ret = {  }
+
     for _f in open( "./csv/files" , "r").readlines()[1:]:
         i = 0  # TODO update
         cur_v = viscosities[i]
@@ -109,18 +150,14 @@ def get_radius():
                 y = y[:-l]
             x = x.to_numpy().reshape(-1, 20)
             y = y.to_numpy().reshape(-1, 20)
-            x = x*((10**(-4))/2) #TODO check scale
-            y = y*((10**(-4))/2)
+            x, y = convert_pix_to_meters(x,y)
 
             f = lambda z: z - z[0]
             x = np.apply_along_axis(f, 1, x)
             y = np.apply_along_axis(f, 1, y)
             x = np.var(x, axis=0)
             y = np.var(y, axis=0)
-            r_mass = np.power(x,2) + np.power(y,2)
-            # r_mass = np.apply_along_axis(f, 1, r_mass)
-            # r_mass = np.var(r_mass, axis=0)
-            # plt.plot(r_mass)
+            r_mass = x + y
             cur = A*1.9/(cur_v*r_mass[-1])
             if cur > 1:
                 print("particle radius of ", _f, lets[j], ": bad format")
@@ -128,47 +165,66 @@ def get_radius():
             coeff_x.append(cur)
             coeff_y.append(A/(cur_v*cur))
             print("particle radius of ", _f, lets[j], ": ", cur)
+            ret[ _f + lets[j] ] = cur
             cur = truncate(cur, 5)
-            print(cur)
+            # print(cur)
             Kbs.append(3*cur_v*np.pi*cur*r_mass[-1]/(2*1.9*294.15))
 
         i+=1
 
-    from scipy.stats import describe
-    print(describe(Kbs))
-    plt.plot(coeff_x, coeff_y, 'o', color='black')
-    plt.show()
-    print(coeff_x)
-    print(coeff_y)
+    # from scipy.stats import describe
+    # print(describe(Kbs))
+    # plt.plot(coeff_x, coeff_y, 'o', color='black')
+    # plt.show()
+    # print(coeff_x)
+    # print(coeff_y)
+    return ret
 
 
-
-
-
-
-
-def original_tracker():
+def original_tracker(radiuses):
     
     print(viscosities)
     _id = 0
-    for _filename, viscosity in zip(open( "./csv/files" , "r").readlines()[1:], viscosities):
+    letters = [ 'A', 'B', 'C', 'D']
+    calibrated = [ [] , [ ]]
+    relevent_radiuses = [] 
+    for _filename, (p, viscosity) in zip(open( "./csv/files" , "r").readlines()[1:], zip(precents, viscosities)):
         bunch = [ pd.read_csv('./csv/BrownCSV/{0}'.format(_filename.format(letter)[:-1] ),\
-            sep=',',header=None)  for letter in [ 'A', 'B', 'C', 'D'] ]
+            sep=',',header=None)  for letter in letters ]
 
-        # just for compiling. should take real values.
-        radiuses = np.array([ random( ) * 10 ** -5   for _ in range(4) ])
-        coefs = np.array([ firsttry_plotoneparticale(particale, viscosity, letter + "{0}".format(_id)) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])
-        coefs = np.array([ plotoneparticale(particale, viscosity, letter + "{0}".format(_id)) for particale,letter in zip(bunch,[ 'A', 'B', 'C', 'D']) ])
-        print(coefs.shape)
+        np.array([ firsttry_plotoneparticale(particale, p, letter + "{0}".format(_id))\
+             for particale,letter in zip(bunch,letters) ])
         
+        coefs = np.array([ plotoneparticale(particale, p, letter + "{0}".format(_id))\
+             for particale,letter in zip(bunch,letters) ])
+        
+        # coefs = coefs.astype(dtype=flaot64)
         constant = 3 *np.pi 
-        # print(coefs[:,:,0][:,0])
-        coefs ,poly = extract_coef( 1/(constant * radiuses) ,  coefs[:,:,0][:,0])        
-        bolzmanfactor.append( coefs[0] )
-        _id += 1
+        for j, letter in enumerate(letters):
+            if  _filename + letter in radiuses and coefs[j][-1][0] != 0:
+                calibrated[0].append( (radiuses[ _filename + letter ] * viscosity * constant) ** -1 )
+                relevent_radiuses.append(radiuses[ _filename + letter ])
+                calibrated[1].append(  coefs[j][-1][0] )  
 
-    print( bolzmanfactor )
-    print(np.mean( np.array( bolzmanfactor ) ) / roomtempKelvin)
+        # bolzmanfactor_estimate ,poly = extract_coef( (1/constant) * ) ,  coefs[:,:,0][j,0])        
+        # bolzmanfactor.append( bolzmanfactor_estimate[0] )
+        _id += 1
+    relevent_radiuses = np.array(relevent_radiuses)
+    calibrated = np.array(calibrated )
+    # calibrated = np.array([calibrated[ _ ].flatten() for _ in range(2)])
+    # calibrated = np.var(calibrated, axis= 1)
+    print(calibrated)
+    print(calibrated.shape)
+    plt.clf()
+    aa = plt.gcf()
+    #plt.scatter( calibrated[0] ,calibrated[1]  ) 
+    aa, coef = plot_linear_line_bolzman( ( calibrated[0] ,calibrated[1] ), aa, "calibrated" , relevent_radiuses, f = lambda t,a,b : a*t)
+    plt.show()
+    print(  coef[0] /   roomtempKelvin ,coef[1] )
+    import scipy.constants as constants
+    print ( constants.k )
+    # print( bolzmanfactor )
+    # print(np.mean( np.array( bolzmanfactor ) ) / roomtempKelvin)
 
 def generateGeneralTable(  rows ):
 
@@ -268,7 +324,7 @@ def generatelyx( ):
 
 
 if __name__ == "__main__" :
-    original_tracker()
-    # get_radius()
+    radiuses = get_radius()
+    original_tracker(radiuses)
     generatelyx()
 # ()
