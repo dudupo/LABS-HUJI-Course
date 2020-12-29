@@ -74,7 +74,11 @@ customHeadersFooters
 \math_numbering_side default
 \quotes_style english
 \dynamic_quotes 0
+<<<<<<< HEAD
 \papercolumns 2
+=======
+\papercolumns 1
+>>>>>>> master
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
@@ -101,6 +105,7 @@ customHeadersFooters
 \begin_layout Standard
 הניסוי בוחן תנועה רב חלקיקית, תחת הנחת הארגודיות - לפיה הכוח מתפלג באופן
  אחיד על כלל המערכת-.
+<<<<<<< HEAD
  ולכן מיצוע שלו יניב 
 \begin_inset Formula $\left\langle xF\left(t\right)\right\rangle =0$
 \end_inset
@@ -224,6 +229,12 @@ status open
 \end_inset
 
 
+=======
+ הפתרון תחת ההנחה הזאת מתאר כי השונות של התפלגות המרחק היא לניארית בזמן
+ והיא שווה לתוחלת ריבוע המרחק.
+ בניסוי אנו מאמתים תאוריה זאת, על ידי דגימת מערכת בה אנו מאפשרים לחלקיקי
+ פוליאתילן לצוף ברחבי נוזלים שונים.
+>>>>>>> master
 \end_layout
 
 \begin_layout Section
@@ -234,6 +245,7 @@ status open
 % תאור מהלך הניסוי איך הניסוי בוצע - שיטת העבודה בעיות מיוחדות – איך התגברתם
 \end_layout
 
+<<<<<<< HEAD
 \begin_layout Subsubsection
 תיאור טכני של מהלך הניסוי.
 \end_layout
@@ -1171,6 +1183,8 @@ status open
 
 \end_layout
 
+=======
+>>>>>>> master
 \begin_layout Section
 0
 \numeric on
@@ -1180,6 +1194,7 @@ status open
  – מה מקורן – איך התגברתם השוואת התוצאות לתאוריה
 \end_layout
 
+<<<<<<< HEAD
 \begin_layout Standard
 
 \end_layout
@@ -1305,6 +1320,8 @@ end{center}
  האם יש לכם אומדן לגודל החלקיקים? האם כל דיפוזיה היא תנועה בראונית?
 \end_layout
 
+=======
+>>>>>>> master
 \begin_layout Section
 שיחת סיכום 
 \numeric on
@@ -1313,6 +1330,7 @@ end{center}
  נקודות על אי-קיומה
 \end_layout
 
+<<<<<<< HEAD
 \begin_layout Section
 נספחים :
 \end_layout
@@ -1327,5 +1345,7 @@ end{center}
 
 \end_layout
 
+=======
+>>>>>>> master
 \end_body
 \end_document
