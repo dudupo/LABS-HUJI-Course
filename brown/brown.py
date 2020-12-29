@@ -167,6 +167,24 @@ def reduce_mean_mean(particales):
     return particales
 
 def reasonable_kernel(_particale):
+<<<<<<< HEAD
+    def _reasonable_kernel(_particale_):
+        
+        if _particale_ is None:
+            return []
+        temp = _particale_
+        while temp.next != None: 
+            if temp.distance( temp.next  ) > 40: 
+                if temp.prev is None:
+                    return []
+                else:
+                    temp.prev.next = None
+                    return [_particale_]  + _reasonable_kernel(temp.next)
+            temp = temp.next
+        return [_particale]
+    return _reasonable_kernel (_particale)
+    
+=======
     temp = _particale
     frames = 1
     while temp.next != None:
@@ -182,6 +200,7 @@ def reasonable_kernel(_particale):
         return None
     return _particale
 
+>>>>>>> master
 def calculate_time_distance(_particale):
     global ind, x_arr, y_arr, r_arr
     temp = _particale
@@ -424,34 +443,44 @@ def padding_list_with_nan(lists):
     maxlen = max(lists, key = len(lists) )
 
 
-def calculate_average( distance_time ):
+def calculate_average( distance_time , bachsize = 13 ):
     '''
         when our limits of the arrays are not equal
 
         E [ x ... x_n  ], E [ x ... x_n-1  ], ..
     '''
-    _indices = sorted( [ len(_arr[0]) for _arr in distance_time ] )
+    
+    distance_time = filter( lambda x : len(x[0]) >= bachsize, distance_time )
+    distance_time = map(lambda x : x[0][:bachsize], distance_time)
+    distance_time = np.array(list(distance_time))
+    if len(distance_time) == 0 :
+        return distance_time
+    print(distance_time)
+    distance_time = np.apply_along_axis(lambda X : X - X[0],  1, distance_time)  
+    return np.mean(distance_time, axis=0) 
 
-    indices = [ _indices[0] ]
-    for val in _indices[1:]:
-        if val != indices[-1]:
-            indices.append( val ) 
-    print(indices)
+    # _indices = sorted( [ len(_arr[0]) for _arr in distance_time ] )
 
-    if len(indices) == 1:
-        return np.var(np.array(distance_time)[:,0]**0.5, axis=0)
+    # indices = [ _indices[0] ]
+    # for val in _indices[1:]:
+    #     if val != indices[-1]:
+    #         indices.append( val ) 
+    # print(indices)
 
-    left, right = indices[:-2] , indices[1:] 
-    ret = [ ]
-    for x,y in zip(left, right):
-        N = 0
-        temp = np.zeros(y-x)
-        for case in distance_time:
-            if len(case[0]) >= y:
-                temp += np.array(case[0][x:y])
-                N += 1
-        if N > 0:
-            ret += (temp/(N**2)).tolist() 
+    # if len(indices) == 1:
+    #     return np.var(np.array(distance_time)[:,0]**0.5, axis=0)
+
+    # left, right = indices[:-2] , indices[1:] 
+    # ret = [ ]
+    # for x,y in zip(left, right):
+    #     N = 0
+    #     temp = np.zeros(y-x)
+    #     for case in distance_time:
+    #         if len(case[0]) >= y:
+    #             temp += np.array(case[0][x:y])
+    #             N += 1
+    #     if N > 0:
+    #         ret += (temp/(N**2)).tolist() 
 
     # try:
     # T = np.array(list(map(lambda c : c[0][:20],\
@@ -545,6 +574,66 @@ def plot_aside_fix(sequence):
 
 from scipy.ndimage import gaussian_filter
 
+
+def cutting_changes(particale, bachsize = 13):
+    
+    ret = []
+    
+    while particale.next != None:
+        if particale.prev != None:
+            particale.prev.next = None
+            particale.prev = None
+        ret.append( particale )
+        for _ in range(bachsize):
+            if particale.next == None:
+                return ret
+            particale = particale.next
+        if particale.next != None:
+            particale = particale.next
+    return ret
+
+def cutting_changes_particales( particales ):
+    ret = []
+    for particale in  particales:
+        ret += cutting_changes( particale )
+    return ret
+
+from scipy.optimize import curve_fit
+def extract_coef( distance_time_vec ):
+    def f(x, a, b):
+        return a*x + b
+    distance, time = distance_time_vec
+    distance, time = np.array(distance), np.array(time)
+    distance -= distance[0]
+    print(distance.shape)
+    if len(distance) > 1:
+        # coef= np.polyfit(time, distance,1)
+        
+        popt, pcov = curve_fit(f, time, distance)
+        # coef = np.poly1d(time, distance, 1)
+        # return [[time[0], time[-1]], [coef[0], coef[-1]]]
+        return popt, f(time, *popt) #np.poly1d(coef)(time)
+    else :
+        return 0, np.array([0])
+
+def plot_average( distance_time, fig, case):
+
+    aver = calculate_average(distance_time )
+    plt.plot(aver)
+    plt.title(  r' $ E [ r^2 ] $ as function of time {0}'.format( case)  )
+    plt.xlabel(r'time [ frames ]')
+    plt.ylabel(r'$r$ [px]')
+    if len(aver) > 0 :
+        coef, poly = extract_coef( [ aver, list(range(len(aver)))] )
+        plt.plot(poly)
+        plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0])]) #] )
+    fig.savefig("./fig/E-{0}.png".format(case))
+    return fig, 0
+    
+
+    #def a function
+
+
 def test_read():
     global x_arr, y_arr, r_arr
     _arr = [ ]
@@ -596,18 +685,12 @@ def test_read():
             # reasonable = particales_frames[5]
             
             
-            reasonable = particales_frames[7] # list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
-            
+            reasonable = [ _  for __ in  list(map(reasonable_kernel, particales_frames[0])) for _ in __ ]  #particales_frames[5] # list(leaves_generator(particales_frames)) #list(map(reasonable_kernel, particales_frames[0]))
+            reasonable = list(filter( lambda x : x != None, reasonable))
+            reasonable = cutting_changes_particales(reasonable)
+
             if len(reasonable) < 2:
                 continue
-
-            # reasonable = list(map(reasonable_kernel, particales_frames[0]))
-            temp = []
-            for p in reasonable:
-                if p != None:
-                    temp.append(p)
-            reasonable = temp
-            # reasonable = list(filter( lambda x : x != None, reasonable))
             # reasonable = list(filter( lambda p: len(p.x) > 5, reasonable))
             # print("reasonable size = ", len(reasonable) )
 
@@ -680,41 +763,33 @@ def test_read():
             # import matplotlib 
             # matplotlib.rcParams['text.usetex'] = True
 
-            # fig.suptitle( r'graphs for first (make sense) nine particales x values, $ | X_{t+1}  - X_{t} | < \varepsilon $' )
-            #
-            # for _ in range(3):
-            #     axs[2, _].set_xlabel(r'time [ frames ]')
-            #     axs[_, 0].set_ylabel(r'$ r^2 $ [px]')
-            #
-            # for i in range(3):
-            #     for j in range(3):
-            #         if i*3 + j < len(distance_time):
-            #             axs[i, j].plot(distance_time[i*3 + j][0].copy())
-            #
+            fig.suptitle( r'graphs for first (make sense) nine particales, $ | X_{t+1}  - X_{t} | < \varepsilon $' )
+            
+            for _ in range(3):
+                axs[2, _].set_xlabel(r'time [ frames ]')
+                axs[_, 0].set_ylabel(r'$ E[r^2] $ [px]')
 
-            # fig.savefig("./fig/9-{0}.png".format(testcases[0]))
+            for i in range(3):
+                for j in range(3):
+                    if i*3 + j < len(distance_time):
+                        axs[i, j].plot(distance_time[i*3 + j][0])   
+                        coef, poly = extract_coef(distance_time[i*3 + j])
+                        axs[i, j].plot(poly)
+            
+
+            fig.savefig("./fig/9-{0}.png".format(testcases[0]))
             # plt.show()
             # plt.close()
             # plt.clf()
             # fig  = plt.gcf()
             # fig, _  = plot_aside_fix( naive_distance_over_frames(particales_frames))
-
-
-
-
-            # plt.plot( calculate_average(distance_time ) )
-            #
-            #
-            # plt.title(  r' $ E [ r^2 ] $ as function of time '  )
-            # plt.xlabel(r'time [ frames ]')
-            # plt.ylabel(r'$r$ [px]')
-            # plt.axis('equal')
-            # fig.savefig("./fig/E-{0}.png".format(testcases[0]))
+            fig, _ = plot_average(distance_time,fig,  testcases[0])
             # plt.show()
 
 
 if __name__ == "__main__":
-    test_read()
+    pass
+    #test_read()
 
 
 
