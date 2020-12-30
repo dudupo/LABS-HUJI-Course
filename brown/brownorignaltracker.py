@@ -23,31 +23,31 @@ def plot_linear_line_E(data, fig, case):
     scale = scale  ** 2
     plt.title( r' $ E [ r^2 ] $ as function of time {0}'.format( case)  )
     plt.xlabel(r'time [ s ]')
-    plt.ylabel(r'$E [ r^2 ] $ [px]')
+    plt.ylabel(r'$E [ r^2 ]_{[ 5 \mu m ]^2}  $')
     coef, poly, pcov = extract_coef( *data )
 
     #  \sum( (r_i + r0)^2 ) / n = r0^2 +2 \cdot E[r] * r0
 
     _error = 1
     yerror = _error **2 + 2 * _error * mean  
-    print(yerror)
+    # print(yerror)
     plt.plot(data[0], poly * scale, c = "teal", alpha=0.6)
     plt.errorbar(data[0], data[1] * scale, yerr = yerror, fmt='o', c= "black" ,alpha=0.2)
-    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0] * scale)]) #] )
+    plt.legend( [ r'liner fitting $D$=' + "{0:.3f}".format(coef[0] * scale), r'measured']) #] )
     fig.savefig("./fig/first/E-{0}.svg".format(case))
     return fig, coef
 
 def plot_linear_line_V(data, fig, case , f = lambda t,a,b : a*t):
     plt.title( r' $ V [ r ] $ as function of time {0}'.format( case)  )
     plt.xlabel(r'time [ s ]')
-    plt.ylabel(r'$V [ r ] $ [px]')
+    plt.ylabel(r'$V [ r ]_{[ 5 \mu m ]^2} $')
     coef, poly, pcov = extract_coef( *data , f= f )
     scale, _ = convert_meters_to_pix(1, 0)
     scale = scale ** 2 
     _error = 1
     plt.plot(data[0], poly * scale , c = "teal", alpha=0.6)
     plt.errorbar(data[0],data[1] * scale, yerr = _error ,fmt='o', c= "black" ,alpha=0.2)
-    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0] * scale )]  ) #] )
+    plt.legend( [ r'liner fitting $D$=' + "{0:.3f}".format(coef[0] * scale ), r'measured']  ) #] )
     fig.savefig("./fig/sec/E-{0}.svg".format(case))
     return fig, coef
 
@@ -55,16 +55,18 @@ def plot_linear_line_bolzman(data, fig, case ,relevent_radiuses, f = lambda t,a,
     plt.title( r' $ m = \frac{k_{B}T}{ 3 \pi \mu a } $ as function of $ \mu a $' )
     plt.xlabel(r'$ (\mu a )^{-1} $')
     plt.ylabel(r'$  \frac{k_{B}T}{ 3 \pi \mu a } $')
-    scale, _ = convert_meters_to_pix(1, 0)
-
+    scale, _ = convert_meters_to_pix(1, 0) 
+    # scale *= 5 
     yerrors = ((1 /(relevent_radiuses * scale) ) + 0.1536) * data[1] 
     xerrors = ((1 /(relevent_radiuses * scale)) + 0.1) * data[0]
     
     coef, poly, pcov = extract_coef( *data , f= f )
     plt.errorbar(data[0],data[1], yerr=yerrors, xerr=xerrors , fmt='o'  , c = "black" ,alpha=0.2)
     plt.plot(data[0], poly  , c = "teal", alpha=0.6)
+    # plt.xlim( [-1*10**9,3*10**9])
+    # plt.ylim([0, 0.21 * 10**-9] )
     # _error = -0.1 * 10**-4 * scale
-    plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0]  )]  ) #] )
+    plt.legend( [ r'liner fitting $D$=' + "{0}".format(coef[0]  ), r'measured']  ) #] )
     fig.savefig("./fig/sec/E-{0}.svg".format(case))
     return fig, coef
 
@@ -75,13 +77,13 @@ def convert_to_array( dataset ):
     return np.array( [dataset[i][1:] for i in range(3)] ).astype(float)
 
 def convert_pix_to_meters(x,y):
-    x = x*((10**(-5))/20) #TODO check scale
-    y = y*((10**(-5))/20)
-    return x,y 
+    x = x*((10**(-6)))*5 #TODO check scale
+    y = y*((10**(-6)))*5
+    return x,y
 
 def convert_meters_to_pix(x,y):
-    x = x * 20 * 10**5 
-    y =y* 20 * 10**5
+    x = x / 5 * 10**6 
+    y =y/5  * 10**6
     return x,y 
 
 
@@ -129,7 +131,7 @@ bolzmanfactor = [ ]
 precents = [ 0, 0.1, 0.2, 0.35, 0.5, 0.6] # 0.7, 0.8, 0.9, 0.95, 0.98 ]
 
 # just for compiling. should take real values.
-viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ]).nu for p in precents ]
+viscosities = [  Mixture(['glycerol','water'],ws=[ p, 1 - p ]).nu for p in precents ] 
 
 def get_radius():
     Kbs = []
@@ -337,7 +339,9 @@ def generatelyx( ):
 
 
 if __name__ == "__main__" :
-    radiuses = get_radius()
+    
+    from pickle import dump, load
+    radiuses = load(open("radiuses.pkl"  , "rb"))
     original_tracker(radiuses)
-    generatelyx()
+    # generatelyx()
 # ()
