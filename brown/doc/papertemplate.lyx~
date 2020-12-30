@@ -46,6 +46,7 @@ customHeadersFooters
 \use_package stackrel 1
 \use_package stmaryrd 1
 \use_package undertilde 1
+\use_package animat 1
 \cite_engine basic
 \cite_engine_type default
 \biblio_style plain
@@ -984,13 +985,6 @@ status open
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
 \begin_layout Subsubsection
 סקלינג, שגיאות.
 \end_layout
@@ -1026,17 +1020,74 @@ status open
 \end_inset
 
 .
- בנוסף, הוספנו שגיאת מדידה.
- של כ 
+ בנוסף, הוספנו שגיאת מדידה של כ 
 \begin_inset Formula $1$
 \end_inset
 
- [אורך אופייני] הערכה הזאת היא הערכה גסה, השגיאה האמיתית קצת יותר נמוכה
- ותלויה בעיקר במידת הסימטריה של החלקיק, חלק מהשגיאה גם נובע מקיונטוט של
- פיקסלים ופיפוס שלנו בספירת פיקסל או שתיים.
+ [אורך אופייני] נסמן שגיאה זאת מכאן ועד סוף הדוח כ 
+\begin_inset Formula $1_{\sigma}$
+\end_inset
+
+.
+ הערכה הזאת היא הערכה גסה, השגיאה האמיתית קצת יותר נמוכה ותלויה בעיקר במידת
+ הסימטריה של החלקיק, חלק מהשגיאה גם נובע מקיונטוט של פיקסלים ופיפוס שלנו
+ בספירת פיקסל או שתיים.
  )עבור חלקיקים כדורים, התוכנה אינה מפשלת בחישוב מרכז החלקיק(.
  כמובן שבחישוב הממוצע נקבל כי השגיאה מצטברת אל 
-\begin_inset Formula $\mathbb{E}\left[\left(r\pm1_{\sigma}\right)^{2}\right]=\mathbb{E}\left[r^{2}\pm2r\cdot1_{\sigma}+1_{\sigma}^{2}\right]=\mathbb{E}\left[r^{2}\right]\pm2\mathbb{E}\left[r\right]\cdot$
+\begin_inset Formula 
+\begin{align*}
+\mathbb{E}\left[\left(r\pm1_{\sigma}\right)^{2}\right] & =\mathbb{E}\left[r^{2}\pm2r\cdot1_{\sigma}+1_{\sigma}^{2}\right]=\\
+ & \mathbb{E}\left[r^{2}\right]\pm2\mathbb{E}\left[r\right]\cdot\mathbb{E}\left[1_{\sigma}\right]+\mathbb{E}\left[1_{\sigma}^{2}\right]\\
+ & \le\mathbb{E}\left[r^{2}\right]+2\mathbb{E}\left[r\right]\cdot1_{\sigma}+1_{\sigma}^{2}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר נקודת המוצא הייתה ש 
+\begin_inset Formula $1_{\sigma}$
+\end_inset
+
+ נקבעת לפי היכולת שלנו ולכון ישנה אי תלות בין 
+\begin_inset Formula $1_{\sigma}$
+\end_inset
+
+ ל 
+\begin_inset Formula $r$
+\end_inset
+
+ ולכן 
+\begin_inset Formula $\mathbb{E}\left[r\right]\cdot\mathbb{E}\left[1_{\sigma}\right]=\mathbb{E}\left[r1_{\sigma}\right]$
+\end_inset
+
+.
+ כלומר השגיאה היא :
+\begin_inset Formula 
+\[
+2\mathbb{E}\left[r\right]\cdot1_{\sigma}+1_{\sigma}^{2}
+\]
+
+\end_inset
+
+ ) בגרף כמעט ולא רואים זאת אבל אורך השנתות משתנה (.
+ באופן זהה לחלוטין : 
+\begin_inset Formula 
+\begin{align*}
+\mathbb{V}\left[\left(r\pm1_{\sigma}\right)\right] & =\mathbb{V}\left[r\right]+\cancel{2COV\left(r,1_{\sigma}\right)}+\mathbb{V}\left[1_{\sigma}\right]\\
+ & \mapsto\mathbb{V}\left[r\right]\pm1_{\sigma}
+\end{align*}
+
+\end_inset
+
+נדגיש שבחישוב חיפשנו חסם עליון מבלי להניח כי התפלגות השגיאה על פני 
+\begin_inset Formula $1_{\sigma}$
+\end_inset
+
+.
+\begin_inset Newline newline
 \end_inset
 
 
@@ -1354,9 +1405,18 @@ status open
  ועוד בעיות רבות.
 \end_layout
 
+
+\begin_frame Embedded Animation
+  \animategraphics[loop,controls,width=\linewidth]{10}{C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/clips/10pure-}{0}{16}
+\end_frame
+
 \begin_layout Section
 נספחים.
 \end_layout
+
+generateTable  
+
+generateFigsOneParticale
 
 \end_body
 \end_document

@@ -1452,14 +1452,7 @@ status open
 \end_inset
 
  הגישה גרמה לנו לאובדן של חלקיקים.
- ניסיון שני ויותר מתוחכם היה פשוט להתייחס אליו כאל חלקיק אחד גדול, ומאחר
- והמיצוע נותן יחס זהה לכל חלקיק בלי קשר לגודלו הערכים היו אמורים להסתדר.
- 
-\begin_inset Newline newline
-\end_inset
-
-בכל אופן, גם לאחר פתרון הבעיה הזאת, לא הצלחנו לתת פתרון לפונקציית שידוך
- איכותית.
+ ניסיון שני ויותר מתוחכם היה פשוט להתייחס אליו כאל חלקיק אחד כ
 \end_layout
 
 \end_inset
@@ -1488,28 +1481,39 @@ status open
 \end_inset
 
 
+\numeric on
+6
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ש
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-החלקיק המקונטנט לעומת החלקיק המקורי.
- באדום אנו יכולים לראות את הטרייס שצוייר לפי מקומי מרכזי המסה, באחד הנסיונות.
- הטרייס ציור לאחר 
-\begin_inset Quotes eld
-\end_inset
-
-זיהו
-\begin_inset Quotes erd
-\end_inset
-
- כל השרשראות )השידוכים לארך כל הפריימים( 
-\begin_inset Newline newline
-\end_inset
-
-ואז הדפסה אל התמונה האחרונה בסרטון את המיקומים הנ
-\begin_inset Quotes erd
-\end_inset
-
-ל.
+החלקיק המקונטנט והטרייס שזיהנו לעומת אותו חלקיק בתמונה המקורית
 \end_layout
 
 \end_inset
@@ -1518,109 +1522,6 @@ status open
 \end_layout
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/9-t10p10g.avi.avi00001.png.png
-	display false
-	scale 50
-
-\end_inset
-
-
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-פלט של חישוב 
-\begin_inset Formula $\mathbb{E}\left[r^{2}\right]$
-\end_inset
-
- עבור 
-\begin_inset Formula $9$
-\end_inset
-
- חלקיקים ב 
-\begin_inset Formula $10\%$
-\end_inset
-
- גליצרול אותם הבחנו כהגיונים.
- נציין, שהתמונה ניבחרה באופן סלקטיבי, ה
-\begin_inset Formula $tracker$
-\end_inset
-
- שכתבנו ברוב המקרים החזיר תוצאות גרועות בהרבה.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-אנו יודעים להגיד בוודאות, שמשימת השידוך עבור החלקיקים בפריימים עוקבים, אינה
- משימה טרויאלית שנגמרת רק ב
-\begin_inset Quotes erd
-\end_inset
-
-תקח את הקרוב ביותר, או הדומה ביותר
-\begin_inset Quotes erd
-\end_inset
-
-.
- וניתן להעביר פרק זמן ארוך רק בחקר השידוך המתאים.
- יחד עם זאת נציין כי קיבלנו את הרושם שיש קשר בין תנועת החלקיקים לבין זרימת
- הפיקסלים בתמונה, כולל זרימת הרעש בתמונה.
- אנו מאמינים כי מגמות שינוי במיקום הרעש קשורות לאינטרקציה בין אור לבין תנודות
- מכניות בזורם.
-\end_layout
-
-\begin_layout Standard
-תמונה אחרונה בשביל היופי :
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename C:/Users/davidponar/workspace/LABS-HUJI-Course/brown/fig/9-t10p10g.avi.avi00001.png.png
-	display false
-	scale 50
-
-\end_inset
-
-
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-תמונה אחרונה בשביל היופי.
-\end_layout
-
-\end_inset
-
 
 \end_layout
 
