@@ -16,6 +16,9 @@ def extract_coef( time, distance , f = lambda t,a,b : a*t    ):
 
 
 def plot_linear_line_E(data, fig, case):
+
+    t, (data, mean)= data
+    data = (t, data)
     scale, _ = convert_meters_to_pix(1, 0)
     scale = scale  ** 2
     plt.title( r' $ E [ r^2 ] $ as function of time {0}'.format( case)  )
@@ -23,9 +26,13 @@ def plot_linear_line_E(data, fig, case):
     plt.ylabel(r'$E [ r^2 ] $ [px]')
     coef, poly, pcov = extract_coef( *data )
 
+    #  \sum( (r_i + r0)^2 ) / n = r0^2 +2 \cdot E[r] * r0
+
     _error = 1
+    yerror = _error **2 + 2 * _error * mean  
+    print(yerror)
     plt.plot(data[0], poly * scale, c = "teal", alpha=0.6)
-    plt.errorbar(data[0], data[1] * scale, yerr = _error, fmt='o', c= "black" ,alpha=0.2)
+    plt.errorbar(data[0], data[1] * scale, yerr = yerror, fmt='o', c= "black" ,alpha=0.2)
     plt.legend( [r'measured', r'liner fitting $D$=' + "{0:.3f}".format(coef[0] * scale)]) #] )
     fig.savefig("./fig/first/E-{0}.svg".format(case))
     return fig, coef
@@ -103,7 +110,7 @@ def createplotoneparticale( func, _plotfunc ):
     return genericplotoneparticale
 
 plotoneparticale = createplotoneparticale( lambda _arr : np.var(_arr, axis= 0), plot_linear_line_V )
-firsttry_plotoneparticale = createplotoneparticale( lambda _arr : np.mean(_arr**2, axis= 0), plot_linear_line_E )
+firsttry_plotoneparticale = createplotoneparticale( lambda _arr : ( np.mean(_arr**2, axis= 0), np.mean(_arr, axis= 0)) , plot_linear_line_E )
 
 
 from thermo.chemical import Mixture
@@ -265,7 +272,7 @@ end{{center}}\n
         """.format( "|".join( ['c'] * len(rows[0]) ) , _generateGeneralTable(rows) )
 
 def stringilize(_arr):
-    return ["{0:.3f}".format(_) for _ in _arr]
+    return ["{0:.3f}".format(float(_)) for _ in _arr]
 
 def generateTable():
     return generateGeneralTable([ ["precents"] + stringilize(precents), ["viscositie[Pa*s]"] + stringilize(viscosities)]) 
@@ -276,12 +283,18 @@ def generateDataTables():
         bunch = [ pd.read_csv('./csv/BrownCSV/{0}'.format(_filename.format(letter)[:-1] ),\
             sep=',',header=None)  for letter in [ 'A', 'B', 'C', 'D'] ]
 
-        for particale in bunch :
-            print(particale)
-            rows = [ particale[_] for _ in range(3) ]
-            #  +  list(map(stringilize,  np.array( [ _[1:] for  _ in particale ] ).transpose()))
-            ret.append( generateGeneralTable(rows) )
-    return "\n".join(ret) 
+        # result = pd.concat(bunch, axis=1, join="inner")
+        # for particale in bunch :
+        # 
+        ret.append ( """ \\begin_layout Plain Layout\n {0} \\end_layout\n """.format( _filename ) )
+        for particale in bunch:
+            gen = particale.iterrows()
+            __ , title = next( gen )
+            rows =  [title.astype(str)] + [ stringilize(row) for _, row in gen ]
+            for chunk in np.array_split(rows, len(rows)// 30):
+                ret.append( generateGeneralTable( chunk.tolist())  )
+        # ret.append( generateGeneralTable(rows) )
+    return "\n".join(ret)
 
 
 from os.path import abspath
@@ -291,7 +304,7 @@ def insertFig ( _path  ):
     return """
 \\begin_inset Graphics\n
 	filename {0}\n
-	scale 65\n
+	scale 50\n
 \\end_inset\n""".format( abspath(_path) )
 
 
@@ -299,19 +312,19 @@ from os import walk
 
 def generateFigsOneParticale( ):
     _str, i  = "\\begin_layout\n", 0
-    for (root,dirs,files) in walk('Fig'): 
+    for (root,dirs,files) in walk('Fig/sec'): 
         for _file in files :
             if len(_file) < 18 and "E-r-" in _file : 
-                _str += insertFig( "Fig/" + _file )
-                if i % 2 == 0 and i > 0:
-                    _str += "\n\n\\end_layout\n\n\\begin_layout\n"
-                i += 1
+                _str += insertFig( "Fig/sec/" + _file )
+                # if i % 2 == 0 and i > 0:
+                _str += "\n\n\\end_layout\n\n\\begin_layout\n"
+                # i += 1
 
     return _str  +"\\end_layout\n"
 
 # "generateDataTables\n" : generateDataTables,
 def generatelyx( ):
-    _generators = { "generateTable\n" : generateTable,  "generateFigsOneParticale\n" : generateFigsOneParticale }
+    _generators = { "generateTable\n" : generateTable,  "generateFigsOneParticale\n" : generateFigsOneParticale , "generateDataTables\n" : generateDataTables}
     _str = ""
     for line in open( './doc/papertemplate.lyx', 'r', encoding="utf-8" ).readlines():
         if line in _generators: 
