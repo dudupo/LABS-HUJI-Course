@@ -80,19 +80,24 @@ def main():
     
     print( light_strike)
     # plt.plot( light_strike- np.average( lightoffset ) )
-    # plt.show()
+    plt.show()
 
     print( np.linalg.norm( dark_strike - (light_strike- np.average( lightoffset ) ) ))
     # plt.savefig( "" )
 
     print(np.average( lightoffset ))
-    # plot_phase_diff(ANGELS, np.array(AMP) - np.mean( lightoffset ))
+    plot_phase_diff(ANGELS, np.array(AMP) - np.mean( lightoffset ))
     # plot_phase_diff(ANGELS2, np.array(AMP2)  - np.mean( lightoffset )) # 
-    # plot_phase_diff(ANGELS3, np.array(AMP3) / np.max(np.array(AMP3) ) ) # 
-    
+    plot_phase_diff(ANGELS3, np.array(AMP3) / np.max(np.array(AMP3) ) ) # 
+    plt.show()
     print( len(AMP4x ), len(AMP4y))
-
-    plt.scatter( AMP4x , AMP4y )
+    AMP4Y, AMP4X = np.array(AMP4y), np.array(AMP4x)  
+    
+    comp =  AMP4X + 1j * AMP4Y
+    
+    teta = np.angle( comp )
+    r = np.abs( comp )
+    plt.polar( teta , r )
     plt.show()
 
 if __name__ == "__main__" :
