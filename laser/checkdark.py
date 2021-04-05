@@ -57,6 +57,36 @@ ANGELS4 = [ 0 , 10 ,20 ,30, 40 ,50 ,60, 70, 80, 90, 100, 110, 120, 130 ,140, 150
 AMP4x = [ 7.2, 8.5, 12.9, 8.1, 9.3, 46, 180, 410, 710, 1050, 1200, 1280, 1210, 945, 645, 390, 160, 48, 8, 13, 8.7] #8.4
 AMP4y = [ 8.9, 20, 93, 290, 520, 710, 900, 870, 706, 527, 260, 115, 110, 18, 12, 50, 83, 48, 16, 104, 273]
 
+"reva gal - 15/1 last meeting"
+ANGELS6 =  [ 0 , 10 ,20 ,30, 40,
+                50 ,60, 70, 80, 90,
+                    100, 110, 120, 130,140,
+                        150, 160, 170, 180, 190,
+                         200, 210, 220, 230, 240, 250,
+                            260, 270, 280, 290, 300, 310,
+                             320, 330, 340, 350, 360  ]
+
+angleee = [ 0, 45, 90, 135, 180, 225, 270, 315  ]
+AMP6x =  [ 3500, 47000, 15700, 1000, 3690, 44700, 15000, 900 ]
+AMP6y = [ 43000, 13700, 1197, 3600, 43900, 14700, 1170, 3000  ]
+
+angleee_1 = [ 22, 68 , 112, 158, 202, 248, 292, 338  ]
+AMP6x_1 =  [ 23500, 37700, 700, 240, 24700, 49800, 910, 293]
+AMP6y_1 = [ 41500, 535, 388, 23900, 42000, 430, 461, 23900 ]
+
+
+"revagal linear"
+angleee7 = [ 0, 45, 90, 135, 180, 225, 270, 315  ]
+AMP7x =  [ 3100, 42000, 15300, 930, 3600, 47000, 16000, 980]
+AMP7y = [ 45000, 13300, 1290, 2700, 44500, 14000, 1255, 3300]
+
+angleee7_1 = [ 22, 68 , 112, 158, 202, 248, 292, 338  ]
+AMP7x_1 =  [ 23500, 37700, 700, 240, 24700, 49800, 910, 293]
+AMP7y_1 = [ 41500, 535, 388, 23900, 42000, 430, 461, 23900 ]
+
+
+
+
 "reva gal"
 ANGELS5 =   [ 0 , 10 ,20 ,30, 40 ,50 ,60, 70, 80 ]
 pass5x =    [ 17500 , 11000 ,3950 ,2150, 950 ,350 ,162, 54, 25]
@@ -94,41 +124,49 @@ def plot_phase_diff(angels,  amp):
 
 def main():
     print( len(ANGELS2) == len(AMP2))
-    # return 
-    light_strike = covert_data_frame(pandas.read_excel(_lightexp)) 
-    dark_strike = covert_data_frame(pandas.read_excel(_darkexp))
-    lightoffset = covert_data_frame(pandas.read_excel(_lightoffset))
+    # # return 
+    # light_strike = covert_data_frame(pandas.read_excel(_lightexp)) 
+    # dark_strike = covert_data_frame(pandas.read_excel(_darkexp))
+    # lightoffset = covert_data_frame(pandas.read_excel(_lightoffset))
     
-    print( light_strike)
-    # plt.plot( light_strike- np.average( lightoffset ) )
+    # print( light_strike)
+    # # plt.plot( light_strike- np.average( lightoffset ) )
+    # # plt.show()
+
+    # print( np.linalg.norm( dark_strike - (light_strike- np.average( lightoffset ) ) ))
+    # # plt.savefig( "" )
+
+    # print(np.average( lightoffset ))
+    # plot_phase_diff(ANGELS, np.array(AMP) - np.mean( lightoffset ))
     # plt.show()
-
-    print( np.linalg.norm( dark_strike - (light_strike- np.average( lightoffset ) ) ))
-    # plt.savefig( "" )
-
-    print(np.average( lightoffset ))
-    plot_phase_diff(ANGELS, np.array(AMP) - np.mean( lightoffset ))
-    plt.show()
-    # plot_phase_diff(ANGELS2, np.array(AMP2)  - np.mean( lightoffset )) # 
-    plot_phase_diff(ANGELS3, np.array(AMP3) / np.max(np.array(AMP3) ) ) # 
-    plt.show()
-    # plt.plot(*brosterlocalxpass)
-    plt.plot(*brosterlocalxret)
-    plt.show()
-    plt.plot(brosterlocalxret[0][:-4], brosterlocalxret[1][:-4])
-    plt.show()
+    # # plot_phase_diff(ANGELS2, np.array(AMP2)  - np.mean( lightoffset )) # 
+    # plot_phase_diff(ANGELS3, np.array(AMP3) / np.max(np.array(AMP3) ) ) # 
+    # plt.show()
+    # # plt.plot(*brosterlocalxpass)
+    # plt.plot(*brosterlocalxret)
+    # plt.show()
+    # plt.plot(brosterlocalxret[0][:-4], brosterlocalxret[1][:-4])
+    # plt.show()
     
-    global AMP4x
-    global AMP4y
-    print( len(AMP4x ), len(AMP4y))
+    def plotpolar (A, X,Y):
 
-    AMP4x = np.array(AMP4x)
-    AMP4y = np.array(AMP4y)
+        print( len(X ), len(Y))
 
-    plt.polar(np.deg2rad(ANGELS4)[:-1],  (AMP4x + AMP4y)**0.5 )
+        X = np.array(X)
+        Y = np.array(Y)
 
-    # plt.scatter( AMP4x , AMP4y )
-    plt.show()
+        plt.polar(np.deg2rad(A),  (X + Y)**0.5 )
 
+        # plt.scatter( AMP4x , AMP4y )
+        plt.show()
+
+    def merge( X,Y ):
+        Z = [ ]
+        for _ in range(min(len(X), len(Y))):
+            Z.append( X[_] )
+            Z.append( Y[_] )
+        return np.array(Z)
+    plotpolar( angleee7, AMP7y,AMP7x )
+    plotpolar( merge(angleee,angleee_1), merge(AMP6y,AMP6y_1) , merge(AMP6x, AMP6x_1))
 if __name__ == "__main__" :
     main()
