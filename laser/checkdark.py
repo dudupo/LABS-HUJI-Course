@@ -60,7 +60,9 @@ AMP4y = [ 8.9, 20, 93, 290, 520, 710, 900, 870, 706, 527, 260, 115, 110, 18, 12,
 "reva gal"
 ANGELS5 =   [ 0 , 10 ,20 ,30, 40 ,50 ,60, 70, 80 ]
 pass5x =    [ 17500 , 11000 ,3950 ,2150, 950 ,350 ,162, 54, 25]
-ret5x =     [ 0,19, 15.3, 11.9, 10.4 ,3 , 2.8 , 34.6, 84.5 , -, -, -, -, - ,-, -, -, -, -, -, -, - ]
+# ret5x =     [ 0,19, 15.3, 11.9, 10.4 ,3 , 2.8 , 34.6, 84.5 , -, -, -, -, - ,-, -, -, -, -, -, -, - ]
+# pass5y =    [ 39800, 40900, 38000, 33800 ,12000 ,1830, 235, 36 , 4, -, -, -, - ,-, -, -, -, -, -, -, - ] 
+# ret5y =     [ 0,30, 23.6, 29.5, 94.5 , 201, 695, 640, 510 , -, -, -, -, - ,-, -, -, -, -, -, -, - ]
 
 brosterlocalxpass = [ 
         [50, 51, 52, 53, 53, 54, 55, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68 , 69, 70, 75 ],
@@ -73,10 +75,8 @@ brosterlocalxret = [
 ]
 
 
-pass5y =    [ 39800, 40900, 38000, 33800 ,12000 ,1830, 235, 36 , 4, -, -, -, - ,-, -, -, -, -, -, -, - ] 
-ret5y =     [ 0,30, 23.6, 29.5, 94.5 , 201, 695, 640, 510 , -, -, -, -, - ,-, -, -, -, -, -, -, - ]
 
-AMP4y = [ - , - ,- ,-, - ,- ,-, -, -, -, -, -, -, - ,-, -, -, -, -, -, -, - ]
+# AMP4y = [ - , - ,- ,-, - ,- ,-, -, -, -, -, -, -, - ,-, -, -, -, -, -, -, - ]
 
 
 def covert_data_frame( df ):
@@ -107,13 +107,27 @@ def main():
     # plt.savefig( "" )
 
     print(np.average( lightoffset ))
-    # plot_phase_diff(ANGELS, np.array(AMP) - np.mean( lightoffset ))
+    plot_phase_diff(ANGELS, np.array(AMP) - np.mean( lightoffset ))
+    plt.show()
     # plot_phase_diff(ANGELS2, np.array(AMP2)  - np.mean( lightoffset )) # 
-    # plot_phase_diff(ANGELS3, np.array(AMP3) / np.max(np.array(AMP3) ) ) # 
+    plot_phase_diff(ANGELS3, np.array(AMP3) / np.max(np.array(AMP3) ) ) # 
+    plt.show()
+    # plt.plot(*brosterlocalxpass)
+    plt.plot(*brosterlocalxret)
+    plt.show()
+    plt.plot(brosterlocalxret[0][:-4], brosterlocalxret[1][:-4])
+    plt.show()
     
+    global AMP4x
+    global AMP4y
     print( len(AMP4x ), len(AMP4y))
 
-    plt.scatter( AMP4x , AMP4y )
+    AMP4x = np.array(AMP4x)
+    AMP4y = np.array(AMP4y)
+
+    plt.polar(np.deg2rad(ANGELS4)[:-1],  (AMP4x + AMP4y)**0.5 )
+
+    # plt.scatter( AMP4x , AMP4y )
     plt.show()
 
 if __name__ == "__main__" :
