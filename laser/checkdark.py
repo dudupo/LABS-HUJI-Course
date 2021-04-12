@@ -104,6 +104,12 @@ brosterlocalxret = [
         [2, 1.95, 1.7, 1.49, 1.36, 1.32, 1.32, 1.4, 1.54, 1.63, 1.95, 2.5, 3.7, 6.24, 13.3, 35.3  ]
 ]
 
+ANGELS_LAST =   [ 0 , 20 ,40 ,60, 80 ,100 ,120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340 ]
+AMP_LAST =   [ 41.9, 39.9, 40.1, 43, 44.6, 44, 43.9, 41.6, 39.9, 38.9, 40.1, 42, 43, 43.9, 43.8, 42.4, 42.4, 40.6  ]
+
+
+
+
 
 
 # AMP4y = [ - , - ,- ,-, - ,- ,-, -, -, -, -, -, -, - ,-, -, -, -, -, -, -, - ]
@@ -166,7 +172,15 @@ def main():
             Z.append( X[_] )
             Z.append( Y[_] )
         return np.array(Z)
-    plotpolar( angleee7, AMP7y,AMP7x )
-    plotpolar( merge(angleee,angleee_1), merge(AMP6y,AMP6y_1) , merge(AMP6x, AMP6x_1))
+    # plotpolar( angleee7, AMP7y,AMP7x )
+    # plotpolar( merge(angleee,angleee_1), merge(AMP6y,AMP6y_1) , merge(AMP6x, AMP6x_1))
+    global AMP_LAST
+    AMP_LAST = np.array(AMP_LAST)
+    AMP_LAST = AMP_LAST/ np.max(AMP_LAST)
+    plt.polar(np.deg2rad( ANGELS_LAST ),  AMP_LAST )
+        # plt.scatter( AMP4x , AMP4y )
+    plt.show()
+
+
 if __name__ == "__main__" :
     main()
